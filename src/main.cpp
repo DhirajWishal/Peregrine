@@ -1,7 +1,8 @@
 // Copyright 2023 Dhiraj Wishal
 // SPDX-License-Identifier: Apache-2.0
 
-#include "systems/output/OutputSystem.hpp"
+#include "systems/OutputSystem.hpp"
+#include "systems/Stabilizer.hpp"
 
 void setup()
 {
@@ -9,6 +10,7 @@ void setup()
 	Serial.println("Welcome to Peregrine!");
 	Serial.println("Initializing the controller.");
 
+	// Initialize the output system.
 	OutputSystem::Instance().initialize();
 
 	// Setup motors
@@ -22,6 +24,10 @@ void setup()
 void loop()
 {
 	// Upate coms
-	// Update stabilizer
-	// Update outputs
+
+	// Update the stabilization.
+	Stabilizer::Instance().update();
+
+	// Update the output system.
+	OutputSystem::Instance().update();
 }

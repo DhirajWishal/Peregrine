@@ -38,6 +38,9 @@ public:
 	void update() override;
 
 private:
+	Servo m_LeftMotor;
+	Servo m_RightMotor;
+
 	Servo m_LeftWingServo;
 	Servo m_RightWingServo;
 	Servo m_ElevatorServo;
