@@ -5,6 +5,7 @@
 
 #include "core/System.hpp"
 #include "components/MPU6050.hpp"
+#include "algorithms/PID.hpp"
 
 /**
  * @brief Stabilizer class.
@@ -16,7 +17,7 @@ public:
 	/**
 	 * @brief Construct a new Stabilizer object.
 	 */
-	Stabilizer() = default;
+	Stabilizer();
 
 	/**
 	 * @brief Initialize the stabilizer.
@@ -28,6 +29,14 @@ public:
 	 */
 	void update() override;
 
+	float yawValue() { return m_Sensor.getAcceleration().m_Pitch; }
+
+	Vec3 computeOutputs(float thrust, float pitch, float roll, float yaw);
+
 private:
 	MPU6050 m_Sensor;
+
+	PID m_PitchStabilizer;
+	PID m_RollStabilizer;
+	PID m_YawStabilizer;
 };

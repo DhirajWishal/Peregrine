@@ -3,8 +3,18 @@
 
 #include "OutputSystem.hpp"
 
+#include "InputSystem.hpp"
+#include "Stabilizer.hpp"
+
+#include "core/Constants.hpp"
+
 constexpr auto g_MotorMinPWM = 1000;
 constexpr auto g_MotorMaxPWM = 2000;
+
+float FitToRange(float value, float fromMax)
+{
+	return map(value, 0, fromMax, 0, 180);
+}
 
 void OutputSystem::initialize()
 {
@@ -15,7 +25,7 @@ void OutputSystem::initialize()
 
 	m_LeftWingServo.attach(g_LeftWingServoPin);
 	m_RightWingServo.attach(g_RightWingServoPin);
-	
+
 	m_ElevatorServo.attach(g_ElevatorServoPin);
 	m_RudderServo.attach(g_RudderServoPin);
 
@@ -24,6 +34,40 @@ void OutputSystem::initialize()
 
 void OutputSystem::update()
 {
+	const auto inputThrust = InputSystem::Instance().getThrust();
+	const auto inputPitch = InputSystem::Instance().getPitch();
+	const auto inputRoll = InputSystem::Instance().getRoll();
+	const auto inputYaw = InputSystem::Instance().getYaw();
+
+	const auto outputs = Stabilizer::Instance().computeOutputs(inputThrust, inputPitch, inputRoll, inputYaw);
+
+	float leftMotorThrust = inputThrust;
+	float rightMotorThrust = inputThrust;
+
+	float leftWingAngle = inputYaw + (Stabilizer::Instance().yawValue() * 10);
+	float rightWingAngle = /*100 - */ leftWingAngle;
+
+	Serial.print("LMT: ");
+	Serial.print(leftMotorThrust);
+	Serial.print(" | RMT: ");
+	Serial.print(rightMotorThrust);
+	Serial.print(" | LWA: ");
+	Serial.print(leftWingAngle);
+	Serial.print(" | RWA: ");
+	Serial.print(rightWingAngle);
+	Serial.print(" | Pitch: ");
+	Serial.print(outputs.m_Pitch);
+	Serial.print(" | Roll: ");
+	Serial.print(outputs.m_Roll);
+	Serial.print(" | Yaw: ");
+	Serial.print(outputs.m_Yaw);
+	Serial.println();
+
+	m_LeftMotor.write(FitToRange(leftMotorThrust, g_ThrottleMaximum));
+	m_RightMotor.write(FitToRange(rightMotorThrust, g_ThrottleMaximum));
+
+	m_LeftWingServo.write(FitToRange(leftWingAngle, g_RotationalMaximum));
+	m_RightWingServo.write(FitToRange(rightWingAngle, g_RotationalMaximum));
 }
 
 void OutputSystem::writeToAll()

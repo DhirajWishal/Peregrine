@@ -30,6 +30,38 @@ public:
 	 */
 	void update() override;
 
+	/**
+	 * @brief Get thrust method.
+	 * Return the required thrust.
+	 *
+	 * @return The trust value (0 - 1000).
+	 */
+	[[nodiscard]] float getThrust() { return m_pDataLink->onGetThrust(); }
+
+	/**
+	 * @brief Get pitch method.
+	 * Required pitch value.
+	 *
+	 * @return The pitch value (0 - 100 - 200).
+	 */
+	[[nodiscard]] float getPitch() { return m_pDataLink->onGetPitch(); }
+
+	/**
+	 * @brief Get roll method.
+	 * Required roll value.
+	 *
+	 * @return The roll value (0 - 100 - 200).
+	 */
+	[[nodiscard]] float getRoll() { return m_pDataLink->onGetRoll(); }
+
+	/**
+	 * @brief Get yaw method.
+	 * Return the required yaw value.
+	 *
+	 * @return The yaw value (0 - 100 - 200).
+	 */
+	[[nodiscard]] float getYaw() { return m_pDataLink->onGetYaw(); }
+
 private:
 	IDataLink *m_pDataLink = nullptr;
 };

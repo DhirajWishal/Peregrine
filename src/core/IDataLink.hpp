@@ -27,4 +27,36 @@ public:
 	 * This method is intended to be used to update the data link and to poll the latest information.
 	 */
 	virtual void onUpdate() = 0;
+
+	/**
+	 * @brief On get thrust pure virtual method.
+	 * When this method is called the data link should return the required thrust.
+	 *
+	 * @return The trust value (0 - 1000).
+	 */
+	[[nodiscard]] virtual float onGetThrust() = 0;
+
+	/**
+	 * @brief On get pitch pure virtual method.
+	 * When this method is called the data link should return the required pitch value.
+	 *
+	 * @return The pitch value (0 - 100 - 200).
+	 */
+	[[nodiscard]] virtual float onGetPitch() = 0;
+
+	/**
+	 * @brief On get roll pure virtual method.
+	 * When this method is called the data link should return the required roll value.
+	 *
+	 * @return The roll value (0 - 100 - 200).
+	 */
+	[[nodiscard]] virtual float onGetRoll() = 0;
+
+	/**
+	 * @brief On get yaw pure virtual method.
+	 * When this method is called the data link should return the required yaw value.
+	 *
+	 * @return The yaw value (0 - 100 - 200).
+	 */
+	[[nodiscard]] virtual float onGetYaw() = 0;
 };
