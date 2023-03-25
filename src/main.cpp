@@ -10,6 +10,9 @@ void setup()
 	Serial.println("Welcome to Peregrine!");
 	Serial.println("Initializing the controller.");
 
+	// Initialize the stabilizer.
+	Stabilizer::Instance().initialize();
+
 	// Initialize the output system.
 	OutputSystem::Instance().initialize();
 

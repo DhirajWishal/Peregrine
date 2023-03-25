@@ -4,6 +4,7 @@
 #pragma once
 
 #include "core/System.hpp"
+#include "components/MPU6050.hpp"
 
 /**
  * @brief Stabilizer class.
@@ -18,7 +19,15 @@ public:
 	Stabilizer() = default;
 
 	/**
+	 * @brief Initialize the stabilizer.
+	 */
+	void initialize();
+
+	/**
 	 * @brief Update the stabilizer.
 	 */
 	void update() override;
+
+private:
+	MPU6050 m_Sensor;
 };
