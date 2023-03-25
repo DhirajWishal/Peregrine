@@ -3,6 +3,10 @@
 
 #include "systems/OutputSystem.hpp"
 #include "systems/Stabilizer.hpp"
+#include "systems/InputSystem.hpp"
+
+#include "components/DefaultDataLink.hpp"
+DefaultDataLink g_DefaultDataLink;
 
 void setup()
 {
@@ -16,6 +20,9 @@ void setup()
 	// Initialize the output system.
 	OutputSystem::Instance().initialize();
 
+	// Initialize the input sytem.
+	InputSystem::Instance().initialize(&g_DefaultDataLink);
+
 	// Setup motors
 	// Setup servos
 	// Setup stabilizer
@@ -26,7 +33,8 @@ void setup()
 
 void loop()
 {
-	// Upate coms
+	// Upate the input system.
+	InputSystem::Instance().update();
 
 	// Update the stabilization.
 	Stabilizer::Instance().update();

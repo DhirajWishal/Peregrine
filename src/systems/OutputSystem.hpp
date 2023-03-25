@@ -38,11 +38,27 @@ public:
 	void update() override;
 
 private:
+	/**
+	 * @brief Write to all the servos.
+	 */
+	void writeToAll();
+
+private:
 	Servo m_LeftMotor;
 	Servo m_RightMotor;
 
 	Servo m_LeftWingServo;
 	Servo m_RightWingServo;
+
 	Servo m_ElevatorServo;
 	Servo m_RudderServo;
+
+	int m_LeftMotorThrust = 0;
+	int m_RightMotorThrust = 0;
+
+	int m_LeftWingAngle = 90;
+	int m_RightWingAngle = 90;
+
+	int m_ElevatorAngle = 90;
+	int m_RudderAngle = 90;
 };
