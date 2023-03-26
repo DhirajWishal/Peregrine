@@ -35,26 +35,55 @@ public:
 	 *
 	 * @return The temperature reading in celcius.
 	 */
-	[[nodiscard]] float getTemperature() const { return m_Temperature.temperature; }
+	[[nodiscard]] float getTemperature() const { return m_Temperature; }
 
 	/**
 	 * @brief Get the acceleration data.
 	 *
-	 * @return The 3 component vector with the values.
+	 * @return The 3 component vector with the values in meters per square second.
 	 */
-	[[nodiscard]] Vec3 getAcceleration() const { return Vec3(m_Accelerometer.acceleration.x, m_Accelerometer.acceleration.y, m_Accelerometer.acceleration.z); }
+	[[nodiscard]] Vec3 getAcceleration() const { return m_Accelerometer; }
 
 	/**
 	 * @brief Get the gyroscope data.
 	 *
-	 * @return The 3 component vector with the values.
+	 * @return The 3 component vector with the values in degrees per second (0 - 180).
 	 */
-	[[nodiscard]] Vec3 getGyration() const { return Vec3(m_Gyroscope.gyro.x, m_Gyroscope.gyro.y, m_Gyroscope.gyro.z); }
+	[[nodiscard]] Vec3 getGyration() const { return m_Gyroscope; }
+
+	/**
+	 * @brief Get the Accelerometer Range object.
+	 *
+	 * @return The range.
+	 */
+	[[nodiscard]] mpu6050_accel_range_t getAccelerometerRange() { return m_Module.getAccelerometerRange(); }
+
+	/**
+	 * @brief Get the Gyroscope Range object.
+	 *
+	 * @return The range.
+	 */
+	[[nodiscard]] mpu6050_gyro_range_t getGyroscopeRange() { return m_Module.getGyroRange(); }
+
+private:
+	/**
+	 * @brief Process the accelerometer data.
+	 *
+	 * @param event The sensor event.
+	 */
+	void processAccelerometerData(sensors_event_t event);
+
+	/**
+	 * @brief Process the gyroscopic data.
+	 *
+	 * @param event The sensor event.
+	 */
+	void processGyroscopicData(sensors_event_t event);
 
 private:
 	Adafruit_MPU6050 m_Module;
 
-	sensors_event_t m_Temperature;
-	sensors_event_t m_Accelerometer;
-	sensors_event_t m_Gyroscope;
+	float m_Temperature;
+	Vec3 m_Accelerometer;
+	Vec3 m_Gyroscope;
 };

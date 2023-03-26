@@ -8,3 +8,6 @@ constexpr auto g_ThrottleMaximum = 1000;
 
 constexpr auto g_RotationalMinimum = 0;
 constexpr auto g_RotationalMaximum = 200;
+
+constexpr auto g_MinimumRotationalSpeed = 0;   // degrees per second.
+constexpr auto g_MaximumRotationalSpeed = 180; // degrees per second.

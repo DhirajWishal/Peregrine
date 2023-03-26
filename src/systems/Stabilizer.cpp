@@ -3,6 +3,17 @@
 
 #include "Stabilizer.hpp"
 
+template <class Type>
+inline Type clamp(Type input, Type min, Type max)
+{
+	if (input < min)
+		return min;
+	if (input > max)
+		return max;
+
+	return input;
+}
+
 #include "core/Constants.hpp"
 
 Stabilizer::Stabilizer()
@@ -27,16 +38,26 @@ void Stabilizer::update()
 
 Vec3 Stabilizer::computeOutputs(float thrust, float pitch, float roll, float yaw)
 {
+	// These expected values are in degrees per second.
+	const auto expectedPitch = map(pitch, g_RotationalMaximum, g_RotationalMaximum, g_MinimumRotationalSpeed, g_MaximumRotationalSpeed);
+	const auto expectedYaw = map(yaw, g_RotationalMaximum, g_RotationalMaximum, g_MinimumRotationalSpeed, g_MaximumRotationalSpeed);
+	const auto expectedRoll = map(roll, g_RotationalMaximum, g_RotationalMaximum, g_MinimumRotationalSpeed, g_MaximumRotationalSpeed);
+
 	const auto acceleration = m_Sensor.getAcceleration();
-	const auto gyration = m_Sensor.getGyration();
+	const auto rotationRate = m_Sensor.getGyration();
 
-	const auto currentPitch = map(acceleration.m_Pitch * 100, -1000, 1000, 0, 180);
-	const auto currentYaw = map(acceleration.m_Yaw * 100, -1000, 1000, 0, 180);
-	const auto currentRoll = map(acceleration.m_Roll * 100, -1000, 1000, 0, 180);
+	// These current values are in degrees per second.
+	const auto currentPitch = rotationRate.m_Pitch;
+	const auto currentYaw = rotationRate.m_Yaw;
+	const auto currentRoll = rotationRate.m_Roll;
 
-	const auto expectedPitch = map(pitch, g_RotationalMaximum, g_RotationalMaximum, 0, 180);
-	const auto expectedYaw = map(yaw, g_RotationalMaximum, g_RotationalMaximum, 0, 180);
-	const auto expectedRoll = map(roll, g_RotationalMaximum, g_RotationalMaximum, 0, 180);
+	Serial.print(" | Pitch: ");
+	Serial.print(currentPitch);
+	Serial.print(" | Roll: ");
+	Serial.print(currentRoll);
+	Serial.print(" | Yaw: ");
+	Serial.print(currentYaw);
+	Serial.println();
 
 	const auto outputPitch = m_PitchStabilizer.calculate(currentPitch, expectedPitch);
 	const auto outputYaw = m_YawStabilizer.calculate(currentYaw, expectedYaw);
