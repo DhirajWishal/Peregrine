@@ -41,23 +41,23 @@ public:
 	 * @brief On get pitch method.
 	 * Required pitch value.
 	 *
-	 * @return The pitch value (0 - 100 - 200).
+	 * @return The pitch value (-90 - 90).
 	 */
-	[[nodiscard]] float onGetPitch() override { return 100.0f; }
+	[[nodiscard]] float onGetPitch() override { return 0.0f; }
 
 	/**
 	 * @brief On get roll method.
 	 * Required roll value.
 	 *
-	 * @return The roll value (0 - 100 - 200).
+	 * @return The roll value (-90 - 90).
 	 */
-	[[nodiscard]] float onGetRoll() override { return 100.0f; }
+	[[nodiscard]] float onGetRoll() override { return 0.0f; }
 
 	/**
 	 * @brief On get yaw method.
 	 * Return the required yaw value.
 	 *
-	 * @return The yaw value (0 - 100 - 200).
+	 * @return The yaw value (-90 - 90).
 	 */
-	[[nodiscard]] float onGetYaw() override { return 100.0f; }
+	[[nodiscard]] float onGetYaw() override { return 0.0f; }
 };

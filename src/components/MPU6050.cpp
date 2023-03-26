@@ -7,7 +7,13 @@
 
 #include <Arduino.h>
 
-constexpr auto g_ConvertionConstant = 57.2957795f;
+// 1 Rad/s = 57.2957795 deg/s
+constexpr auto g_RadiansToDegrees = 57.2957795f;
+
+MPU6050::MPU6050()
+	: m_PreviousTime(micros())
+{
+}
 
 void MPU6050::initialize()
 {
@@ -30,6 +36,10 @@ void MPU6050::initialize()
 
 void MPU6050::readData()
 {
+	const auto currentTime = micros();
+	m_DeltaTime = currentTime - m_PreviousTime;
+	m_PreviousTime = currentTime;
+
 	// Get the data from the sensor.
 	sensors_event_t accelerometer;
 	sensors_event_t gyroscope;
@@ -37,88 +47,57 @@ void MPU6050::readData()
 	m_Module.getEvent(&accelerometer, &gyroscope, &temperature);
 
 	// Process the data.
-	processAccelerometerData(accelerometer);
 	processGyroscopicData(gyroscope);
+	processAccelerometerData(accelerometer);
 	m_Temperature = temperature.temperature;
 }
 
 void MPU6050::processAccelerometerData(sensors_event_t event)
 {
-	// Setup the rotation ranges.
-	float rangeMinimum = -8.0f;
-	float rangeMaximum = 8.0f;
+	const auto pitch = atan2(event.acceleration.y, event.acceleration.z) * g_RadiansToDegrees;
+	const auto roll = atan2(-event.acceleration.x, sqrt((event.acceleration.y * event.acceleration.y) + (event.acceleration.z * event.acceleration.z))) * g_RadiansToDegrees;
+	m_Accelerometer.m_Y = event.acceleration.y;
 
-	switch (m_Module.getAccelerometerRange())
+	// This fixes the transition problem when the accelerometer angle jumps between -180 and 180 degrees
+	if ((pitch < -90 && m_Accelerometer.m_Pitch > 90) || (pitch > 90 && m_Accelerometer.m_Pitch < -90))
 	{
-	case MPU6050_RANGE_2_G:
-		rangeMinimum = -2.0f;
-		rangeMaximum = 2.0f;
-		break;
+		m_PitchFilter.setAngle(pitch);
 
-	case MPU6050_RANGE_4_G:
-		rangeMinimum = -4.0f;
-		rangeMaximum = 4.0f;
-		break;
-
-	case MPU6050_RANGE_8_G:
-		rangeMinimum = -8.0f;
-		rangeMaximum = 8.0f;
-		break;
-
-	case MPU6050_RANGE_16_G:
-		rangeMinimum = -16.0f;
-		rangeMaximum = 16.0f;
-		break;
-
-	default:
-		break;
+		m_ComplementaryAngleY = pitch;
+		m_Accelerometer.m_Pitch = pitch;
+		m_Gyroscope.m_Y = pitch;
+	}
+	else
+	{
+		m_Accelerometer.m_Pitch = m_PitchFilter.compute(pitch, m_Gyroscope.m_Pitch, m_DeltaTime); // Calculate the angle using a Kalman filter
 	}
 
-	// Convert them to the required outputs.
-	m_Accelerometer.m_X = map(event.acceleration.x, rangeMinimum, rangeMaximum, g_RotationalMinimum, g_RotationalMaximum);
-	m_Accelerometer.m_Y = map(event.acceleration.y, rangeMinimum, rangeMaximum, g_RotationalMinimum, g_RotationalMaximum);
-	m_Accelerometer.m_Z = map(event.acceleration.z, rangeMinimum, rangeMaximum, g_RotationalMinimum, g_RotationalMaximum);
+	if (abs(m_Accelerometer.m_Roll) > 90)
+		m_Gyroscope.m_Roll = -m_Gyroscope.m_Roll; // Invert rate, so it fits the restriced accelerometer reading
+
+	m_Accelerometer.m_Roll = m_RollFilter.compute(roll, m_Gyroscope.m_Roll, m_DeltaTime); // Calculate the angle using a Kalman filter
+
+	const auto gyroXrate = m_Gyroscope.m_X;
+	const auto gyroYrate = m_Gyroscope.m_Y;
+
+	m_Gyroscope.m_X += m_Gyroscope.m_X * m_DeltaTime; // Calculate gyro angle without any filter
+	m_Gyroscope.m_Y += m_Gyroscope.m_Y * m_DeltaTime;
+
+	m_ComplementaryAngleX = 0.93 * (m_ComplementaryAngleX + gyroXrate * m_DeltaTime) + 0.07 * roll; // Calculate the angle using a Complimentary filter
+	m_ComplementaryAngleY = 0.93 * (m_ComplementaryAngleY + gyroYrate * m_DeltaTime) + 0.07 * pitch;
+
+	// Reset the gyro angle when it has drifted too much
+	if (m_Gyroscope.m_X < -180 || m_Gyroscope.m_X > 180)
+		m_Gyroscope.m_X = m_Accelerometer.m_Pitch;
+
+	if (m_Gyroscope.m_Y < -180 || m_Gyroscope.m_Y > 180)
+		m_Gyroscope.m_Y = m_Accelerometer.m_Roll;
 }
 
 void MPU6050::processGyroscopicData(sensors_event_t event)
 {
 	// Convert from rad/s to deg/s
-	event.gyro.x *= g_ConvertionConstant;
-	event.gyro.y *= g_ConvertionConstant;
-	event.gyro.z *= g_ConvertionConstant;
-
-	// Setup the rotation ranges.
-	float inputRateMinimum = -500.0f;
-	float inputRateMaximum = 500.0f;
-
-	switch (m_Module.getGyroRange())
-	{
-	case MPU6050_RANGE_250_DEG:
-		inputRateMinimum = -250.0f;
-		inputRateMaximum = 250.0f;
-		break;
-
-	case MPU6050_RANGE_500_DEG:
-		inputRateMinimum = -500.0f;
-		inputRateMaximum = 500.0f;
-		break;
-
-	case MPU6050_RANGE_1000_DEG:
-		inputRateMinimum = -1000.0f;
-		inputRateMaximum = 1000.0f;
-		break;
-
-	case MPU6050_RANGE_2000_DEG:
-		inputRateMinimum = -2000.0f;
-		inputRateMaximum = 2000.0f;
-		break;
-
-	default:
-		break;
-	}
-
-	// Convert them to the required outputs.
-	m_Gyroscope.m_Pitch = map(event.gyro.x, inputRateMinimum, inputRateMaximum, g_MinimumRotationalSpeed, g_MaximumRotationalSpeed);
-	m_Gyroscope.m_Yaw = map(event.gyro.y, inputRateMinimum, inputRateMaximum, g_MinimumRotationalSpeed, g_MaximumRotationalSpeed);
-	m_Gyroscope.m_Roll = map(event.gyro.z, inputRateMinimum, inputRateMaximum, g_MinimumRotationalSpeed, g_MaximumRotationalSpeed);
+	m_Gyroscope.m_X = event.gyro.x * g_RadiansToDegrees;
+	m_Gyroscope.m_Y = event.gyro.y * g_RadiansToDegrees;
+	m_Gyroscope.m_Z = event.gyro.z * g_RadiansToDegrees;
 }

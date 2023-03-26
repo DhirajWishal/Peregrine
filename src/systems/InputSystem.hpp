@@ -42,7 +42,7 @@ public:
 	 * @brief Get pitch method.
 	 * Required pitch value.
 	 *
-	 * @return The pitch value (0 - 100 - 200).
+	 * @return The pitch value (-90 - 90).
 	 */
 	[[nodiscard]] float getPitch() { return m_pDataLink->onGetPitch(); }
 
@@ -50,7 +50,7 @@ public:
 	 * @brief Get roll method.
 	 * Required roll value.
 	 *
-	 * @return The roll value (0 - 100 - 200).
+	 * @return The roll value (-90 - 90).
 	 */
 	[[nodiscard]] float getRoll() { return m_pDataLink->onGetRoll(); }
 
@@ -58,7 +58,7 @@ public:
 	 * @brief Get yaw method.
 	 * Return the required yaw value.
 	 *
-	 * @return The yaw value (0 - 100 - 200).
+	 * @return The yaw value (-90 - 90).
 	 */
 	[[nodiscard]] float getYaw() { return m_pDataLink->onGetYaw(); }
 

@@ -6,6 +6,7 @@
 #include "InputSystem.hpp"
 #include "Stabilizer.hpp"
 
+#include "core/Common.hpp"
 #include "core/Constants.hpp"
 
 constexpr auto g_MotorMinPWM = 1000;
@@ -47,35 +48,27 @@ void OutputSystem::update()
 	float leftWingAngle = inputYaw + (Stabilizer::Instance().yawValue() * 10);
 	float rightWingAngle = /*100 - */ leftWingAngle;
 
-	// Serial.print("LMT: ");
-	// Serial.print(leftMotorThrust);
-	// Serial.print(" | RMT: ");
-	// Serial.print(rightMotorThrust);
-	// Serial.print(" | LWA: ");
-	// Serial.print(leftWingAngle);
-	// Serial.print(" | RWA: ");
-	// Serial.print(rightWingAngle);
-	// Serial.print(" | Pitch: ");
-	// Serial.print(outputs.m_Pitch);
-	// Serial.print(" | Roll: ");
-	// Serial.print(outputs.m_Roll);
-	// Serial.print(" | Yaw: ");
-	// Serial.print(outputs.m_Yaw);
-	// Serial.print(" | Input Thrust: ");
-	// Serial.print(inputThrust);
-	// Serial.print(" | Input Pitch: ");
-	// Serial.print(inputPitch);
-	// Serial.print(" | Input Roll: ");
-	// Serial.print(inputRoll);
-	// Serial.print(" | Input Yaw: ");
-	// Serial.print(inputYaw);
+	Serial.print("LMT: ");
+	Serial.print(leftMotorThrust);
+	Serial.print(" | RMT: ");
+	Serial.print(rightMotorThrust);
+	Serial.print(" | LWA: ");
+	Serial.print(leftWingAngle);
+	Serial.print(" | RWA: ");
+	Serial.print(rightWingAngle);
+	Serial.print(" | Pitch: ");
+	Serial.print(outputs.m_Pitch);
+	Serial.print(" | Roll: ");
+	Serial.print(outputs.m_Roll);
+	Serial.print(" | Yaw: ");
+	Serial.print(outputs.m_Yaw);
 	Serial.println();
 
-	m_LeftMotor.write(FitToRange(leftMotorThrust, g_ThrottleMaximum));
-	m_RightMotor.write(FitToRange(rightMotorThrust, g_ThrottleMaximum));
+	m_LeftMotor.write(FitToRange(leftMotorThrust, g_ThrottleInputMaximum));
+	m_RightMotor.write(FitToRange(rightMotorThrust, g_ThrottleInputMaximum));
 
-	m_LeftWingServo.write(FitToRange(leftWingAngle, g_RotationalMaximum));
-	m_RightWingServo.write(FitToRange(rightWingAngle, g_RotationalMaximum));
+	m_LeftWingServo.write(map(leftWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 180));
+	m_RightWingServo.write(map(rightWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 180));
 }
 
 void OutputSystem::writeToAll()

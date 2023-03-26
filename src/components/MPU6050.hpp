@@ -4,6 +4,7 @@
 #pragma once
 
 #include "core/Types.hpp"
+#include "algorithms/KalmanFilter.hpp"
 
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
@@ -18,7 +19,7 @@ public:
 	/**
 	 * @brief Construct a new MPU6050 object.
 	 */
-	MPU6050() = default;
+	MPU6050();
 
 	/**
 	 * @brief Initialize the sensor.
@@ -83,7 +84,16 @@ private:
 private:
 	Adafruit_MPU6050 m_Module;
 
-	float m_Temperature;
+	KalmanFilter m_PitchFilter;
+	KalmanFilter m_RollFilter;
+
 	Vec3 m_Accelerometer;
 	Vec3 m_Gyroscope;
+	float m_Temperature;
+
+	unsigned long m_PreviousTime = 0;
+	unsigned long m_DeltaTime = 0;
+
+	float m_ComplementaryAngleX = 0.0f;
+	float m_ComplementaryAngleY = 0.0f;
 };

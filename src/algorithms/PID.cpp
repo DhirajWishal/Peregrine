@@ -3,7 +3,13 @@
 
 #include "PID.hpp"
 
+#include "core/Common.hpp"
+#include "core/Constants.hpp"
+
 #include <Arduino.h>
+
+constexpr auto g_RangeMinimum = -1000000.0f;
+constexpr auto g_RangeMaximum = 1000000.0f;
 
 PID::PID(float kp, float ki, float kd)
 	: m_PreviousTime(millis()), m_kP(kp), m_kI(ki), m_kD(kd)
@@ -23,5 +29,6 @@ float PID::calculate(float current, float expected)
 	m_PreviousValue = current;
 	m_PreviousTime = currentTime;
 
-	return (m_kP * error) + (m_kI * m_Integral) + derivative;
+	const auto output = clamp((m_kP * error) + (m_kI * m_Integral) + derivative, g_RangeMinimum, g_RangeMaximum);
+	return map(output, g_RangeMinimum, g_RangeMaximum, g_PIDOutputMinimum, g_PIDOutputMaximum);
 }
