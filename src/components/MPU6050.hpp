@@ -92,7 +92,6 @@ private:
 	float m_Temperature;
 
 	unsigned long m_PreviousTime = 0;
-	unsigned long m_DeltaTime = 0;
 
 	float m_ComplementaryAngleX = 0.0f;
 	float m_ComplementaryAngleY = 0.0f;

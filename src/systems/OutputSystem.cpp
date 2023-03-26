@@ -24,11 +24,14 @@ void OutputSystem::initialize()
 	m_LeftMotor.attach(g_LeftMotorPin, g_MotorMinPWM, g_MotorMaxPWM);
 	m_RightMotor.attach(g_RightMotorPin, g_MotorMinPWM, g_MotorMaxPWM);
 
-	m_LeftWingServo.attach(g_LeftWingServoPin);
-	m_RightWingServo.attach(g_RightWingServoPin);
+	// m_LeftWingServo.attach(g_LeftWingServoPin);
+	// m_RightWingServo.attach(g_RightWingServoPin);
 
 	m_ElevatorServo.attach(g_ElevatorServoPin);
 	m_RudderServo.attach(g_RudderServoPin);
+
+	pinMode(g_LeftWingServoPin, OUTPUT);
+	pinMode(g_RightWingServoPin, OUTPUT);
 
 	Serial.println("Output system initialized.");
 }
@@ -45,7 +48,7 @@ void OutputSystem::update()
 	float leftMotorThrust = inputThrust;
 	float rightMotorThrust = inputThrust;
 
-	float leftWingAngle = inputYaw + (Stabilizer::Instance().yawValue() * 10);
+	float leftWingAngle = outputs.m_Pitch;
 	float rightWingAngle = /*100 - */ leftWingAngle;
 
 	Serial.print("LMT: ");
@@ -67,8 +70,12 @@ void OutputSystem::update()
 	m_LeftMotor.write(FitToRange(leftMotorThrust, g_ThrottleInputMaximum));
 	m_RightMotor.write(FitToRange(rightMotorThrust, g_ThrottleInputMaximum));
 
-	m_LeftWingServo.write(map(leftWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 180));
-	m_RightWingServo.write(map(rightWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 180));
+	// m_LeftWingServo.write(map(leftWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 180));
+	// m_RightWingServo.write(map(rightWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 180));
+	// analogWrite(g_LeftWingServoPin, map(leftWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 255));
+	// analogWrite(g_RightWingServoPin, map(rightWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 255));
+	analogWrite(g_LeftWingServoPin, 255);
+	analogWrite(g_RightWingServoPin, 255);
 }
 
 void OutputSystem::writeToAll()

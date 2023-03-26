@@ -36,10 +36,6 @@ void MPU6050::initialize()
 
 void MPU6050::readData()
 {
-	const auto currentTime = micros();
-	m_DeltaTime = currentTime - m_PreviousTime;
-	m_PreviousTime = currentTime;
-
 	// Get the data from the sensor.
 	sensors_event_t accelerometer;
 	sensors_event_t gyroscope;
@@ -54,6 +50,10 @@ void MPU6050::readData()
 
 void MPU6050::processAccelerometerData(sensors_event_t event)
 {
+	const auto currentTime = micros();
+	const auto deltaTime = currentTime - m_PreviousTime;
+	m_PreviousTime = currentTime;
+
 	const auto pitch = atan2(event.acceleration.y, event.acceleration.z) * g_RadiansToDegrees;
 	const auto roll = atan2(-event.acceleration.x, sqrt((event.acceleration.y * event.acceleration.y) + (event.acceleration.z * event.acceleration.z))) * g_RadiansToDegrees;
 	m_Accelerometer.m_Y = event.acceleration.y;
@@ -69,22 +69,22 @@ void MPU6050::processAccelerometerData(sensors_event_t event)
 	}
 	else
 	{
-		m_Accelerometer.m_Pitch = m_PitchFilter.compute(pitch, m_Gyroscope.m_Pitch, m_DeltaTime); // Calculate the angle using a Kalman filter
+		m_Accelerometer.m_Pitch = m_PitchFilter.compute(pitch, m_Gyroscope.m_Pitch, deltaTime); // Calculate the angle using a Kalman filter
 	}
 
 	if (abs(m_Accelerometer.m_Roll) > 90)
 		m_Gyroscope.m_Roll = -m_Gyroscope.m_Roll; // Invert rate, so it fits the restriced accelerometer reading
 
-	m_Accelerometer.m_Roll = m_RollFilter.compute(roll, m_Gyroscope.m_Roll, m_DeltaTime); // Calculate the angle using a Kalman filter
+	m_Accelerometer.m_Roll = m_RollFilter.compute(roll, m_Gyroscope.m_Roll, deltaTime); // Calculate the angle using a Kalman filter
 
 	const auto gyroXrate = m_Gyroscope.m_X;
 	const auto gyroYrate = m_Gyroscope.m_Y;
 
-	m_Gyroscope.m_X += m_Gyroscope.m_X * m_DeltaTime; // Calculate gyro angle without any filter
-	m_Gyroscope.m_Y += m_Gyroscope.m_Y * m_DeltaTime;
+	m_Gyroscope.m_X += m_Gyroscope.m_X * deltaTime; // Calculate gyro angle without any filter
+	m_Gyroscope.m_Y += m_Gyroscope.m_Y * deltaTime;
 
-	m_ComplementaryAngleX = 0.93 * (m_ComplementaryAngleX + gyroXrate * m_DeltaTime) + 0.07 * roll; // Calculate the angle using a Complimentary filter
-	m_ComplementaryAngleY = 0.93 * (m_ComplementaryAngleY + gyroYrate * m_DeltaTime) + 0.07 * pitch;
+	m_ComplementaryAngleX = 0.93 * (m_ComplementaryAngleX + gyroXrate * deltaTime) + 0.07 * roll; // Calculate the angle using a Complimentary filter
+	m_ComplementaryAngleY = 0.93 * (m_ComplementaryAngleY + gyroYrate * deltaTime) + 0.07 * pitch;
 
 	// Reset the gyro angle when it has drifted too much
 	if (m_Gyroscope.m_X < -180 || m_Gyroscope.m_X > 180)

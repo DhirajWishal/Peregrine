@@ -10,7 +10,7 @@ DefaultDataLink g_DefaultDataLink;
 
 void setup()
 {
-	Serial.begin(9600);
+	Serial.begin(115200);
 	Serial.println("Welcome to Peregrine!");
 	Serial.println("Initializing the controller.");
 
@@ -22,11 +22,6 @@ void setup()
 
 	// Initialize the input sytem.
 	InputSystem::Instance().initialize(&g_DefaultDataLink);
-
-	// Setup motors
-	// Setup servos
-	// Setup stabilizer
-	// Setup coms
 
 	Serial.println("The controller initialized. Entering the main loop.");
 }
