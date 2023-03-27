@@ -17,3 +17,9 @@ constexpr auto g_MaximumRotationalSpeed = 180; // degrees per second.
 
 constexpr auto g_PIDOutputMinimum = 0;
 constexpr auto g_PIDOutputMaximum = 180;
+
+constexpr auto g_WingServoOffsetHover = 45;
+constexpr auto g_WingServoOffsetCruise = 135;
+
+constexpr auto g_ElevatorOffset = 90;
+constexpr auto g_RudderOffset = 90;

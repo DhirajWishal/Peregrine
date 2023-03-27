@@ -39,9 +39,22 @@ public:
 
 private:
 	/**
-	 * @brief Write to all the servos.
+	 * @brief Handle the hover mode outputs.
+	 * This method gets called when the drone is in hover mode.
+	 *
+	 * @param thrust The input thrust.
+	 * @param outputs The PID outputs.
 	 */
-	void writeToAll();
+	void handleHoverMode(float thrust, Vec3 outputs);
+
+	/**
+	 * @brief Handle the cruise mode outputs.
+	 * This method gets called when the drone is in cruise mode.
+	 *
+	 * @param thrust The input thrust.
+	 * @param outputs The PID outputs.
+	 */
+	void handleCruiseMode(float thrust, Vec3 outputs);
 
 private:
 	Servo m_LeftMotor;
