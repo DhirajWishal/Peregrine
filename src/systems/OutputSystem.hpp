@@ -6,6 +6,7 @@
 #include "core/System.hpp"
 #include "core/Types.hpp"
 
+#ifndef PEREGRINE_BOARD_ESP32
 #include <Servo.h>
 
 constexpr auto g_LeftMotorPin = 11;
@@ -15,6 +16,19 @@ constexpr auto g_LeftWingServoPin = 9;
 constexpr auto g_RightWingServoPin = 6;
 constexpr auto g_ElevatorServoPin = 5;
 constexpr auto g_RudderServoPin = 3;
+
+#else
+#include <ESP32Servo.h>
+
+constexpr auto g_LeftMotorPin = 32;
+constexpr auto g_RightMotorPin = 33;
+
+constexpr auto g_LeftWingServoPin = 25;
+constexpr auto g_RightWingServoPin = 26;
+constexpr auto g_ElevatorServoPin = 27;
+constexpr auto g_RudderServoPin = 14;
+
+#endif
 
 /**
  * @brief Output system class.
