@@ -30,13 +30,11 @@ public:
 	[[nodiscard]] float calculate(float current, float expected);
 
 private:
-	unsigned long m_PreviousTime = 0;
-
 	float m_kP = 0.0f;
 	float m_kI = 0.0f;
 	float m_kD = 0.0f;
 
 	float m_PreviousValue = 0.0f;
-	
+
 	float m_Integral = 0.0f;
 };

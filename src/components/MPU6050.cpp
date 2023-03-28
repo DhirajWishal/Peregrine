@@ -4,6 +4,7 @@
 #include "MPU6050.hpp"
 
 #include "core/Constants.hpp"
+#include "core/Common.hpp"
 
 #include <Arduino.h>
 
@@ -31,6 +32,10 @@ void MPU6050::initialize()
 	m_Module.setGyroRange(MPU6050_RANGE_500_DEG);
 	m_Module.setFilterBandwidth(MPU6050_BAND_21_HZ);
 
+	// Read initial data to store as offset.
+	// readData();
+	// m_AccelerometerOffset = m_Accelerometer;
+
 	Serial.println("MPU6050 sensor is initialized.");
 }
 
@@ -46,6 +51,15 @@ void MPU6050::readData()
 	processGyroscopicData(gyroscope);
 	processAccelerometerData(accelerometer);
 	m_Temperature = temperature.temperature;
+
+	// Clamp the values to the required ranges.
+	m_Accelerometer.m_Pitch = clamp(m_Accelerometer.m_Pitch, static_cast<float>(g_SensorInputMinimum), static_cast<float>(g_SensorInputMaximum));
+	m_Accelerometer.m_Yaw = clamp(m_Accelerometer.m_Yaw, static_cast<float>(g_SensorInputMinimum), static_cast<float>(g_SensorInputMaximum));
+	m_Accelerometer.m_Roll = clamp(m_Accelerometer.m_Roll, static_cast<float>(g_SensorInputMinimum), static_cast<float>(g_SensorInputMaximum));
+
+	m_Gyroscope.m_X = clamp(m_Gyroscope.m_X, static_cast<float>(g_SensorInputMinimum), static_cast<float>(g_SensorInputMaximum));
+	m_Gyroscope.m_Y = clamp(m_Gyroscope.m_Y, static_cast<float>(g_SensorInputMinimum), static_cast<float>(g_SensorInputMaximum));
+	m_Gyroscope.m_Z = clamp(m_Gyroscope.m_Z, static_cast<float>(g_SensorInputMinimum), static_cast<float>(g_SensorInputMaximum));
 }
 
 void MPU6050::processAccelerometerData(sensors_event_t event)

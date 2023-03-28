@@ -33,7 +33,7 @@ public:
 	 * @brief On get thrust method.
 	 * Return the required thrust.
 	 *
-	 * @return The trust value (0 - 1000).
+	 * @return The thrust value.
 	 */
 	[[nodiscard]] float onGetThrust() override { return 100.0f; }
 
@@ -41,7 +41,7 @@ public:
 	 * @brief On get pitch method.
 	 * Required pitch value.
 	 *
-	 * @return The pitch value (-90 - 90).
+	 * @return The pitch value.
 	 */
 	[[nodiscard]] float onGetPitch() override { return 0.0f; }
 
@@ -49,7 +49,7 @@ public:
 	 * @brief On get roll method.
 	 * Required roll value.
 	 *
-	 * @return The roll value (-90 - 90).
+	 * @return The roll value.
 	 */
 	[[nodiscard]] float onGetRoll() override { return 0.0f; }
 
@@ -57,7 +57,7 @@ public:
 	 * @brief On get yaw method.
 	 * Return the required yaw value.
 	 *
-	 * @return The yaw value (-90 - 90).
+	 * @return The yaw value.
 	 */
 	[[nodiscard]] float onGetYaw() override { return 0.0f; }
 };

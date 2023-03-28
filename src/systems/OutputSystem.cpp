@@ -16,6 +16,8 @@ constexpr auto g_MotorMaxPWM = 2000;
 constexpr auto g_ServoMinimum = 0;
 constexpr auto g_ServoMaximum = 180;
 
+constexpr auto g_InputMidValue = 90;
+
 void OutputSystem::initialize()
 {
 	Serial.println("Initializing the output system.");
@@ -76,15 +78,36 @@ void OutputSystem::update()
 
 void OutputSystem::handleHoverMode(float thrust, Vec3 outputs)
 {
-	float leftMotorThrust = thrust;
-	float rightMotorThrust = thrust;
+	// Outputs range: -90 - 90
+	// Thrust range: 0 - 1000
+	// Servo range: 0 - 180
+
+	const auto mappedThrust = map(thrust, g_ThrottleInputMinimum, g_ThrottleInputMaximum, g_ServoMinimum, g_ServoMaximum);
+
+	float leftMotorThrust = mappedThrust;
+	float rightMotorThrust = mappedThrust;
 
 	float leftWingAngle = g_WingServoOffsetHover;
 	float rightWingAngle = g_WingServoOffsetHover;
 
 	// Handle pitch
+	leftWingAngle += outputs.m_Pitch;
+	rightWingAngle += outputs.m_Pitch;
+
 	// Handle yaw
+	leftWingAngle -= outputs.m_Yaw;
+	rightWingAngle += outputs.m_Yaw;
+
 	// Handle roll
+	leftMotorThrust += outputs.m_Roll;
+	rightMotorThrust -= outputs.m_Roll;
+
+	// Clamp the values to the requried ranges.
+	leftWingAngle = clamp(static_cast<int>(leftWingAngle), g_ServoMinimum, g_ServoMaximum);
+	rightWingAngle = clamp(static_cast<int>(rightWingAngle), g_ServoMinimum, g_ServoMaximum);
+
+	leftMotorThrust = clamp(static_cast<int>(leftMotorThrust), g_ServoMinimum, g_ServoMaximum);
+	rightMotorThrust = clamp(static_cast<int>(rightMotorThrust), g_ServoMinimum, g_ServoMaximum);
 
 	Serial.print("LMT: ");
 	Serial.print(leftMotorThrust);
@@ -103,12 +126,12 @@ void OutputSystem::handleHoverMode(float thrust, Vec3 outputs)
 	Serial.println();
 
 	// Write to the motors
-	m_LeftMotor.write(map(leftMotorThrust, g_ThrottleInputMinimum, g_ThrottleInputMaximum, g_ServoMinimum, g_ServoMaximum));
-	m_RightMotor.write(map(rightMotorThrust, g_ThrottleInputMinimum, g_ThrottleInputMaximum, g_ServoMinimum, g_ServoMaximum));
+	m_LeftMotor.write(leftMotorThrust);
+	m_RightMotor.write(rightMotorThrust);
 
 	// Write to the wing servos.
-	m_LeftWingServo.write(map(leftWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, g_ServoMinimum, g_ServoMaximum));
-	m_RightWingServo.write(map(rightWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, g_ServoMinimum, g_ServoMaximum));
+	m_LeftWingServo.write(leftWingAngle);
+	m_RightWingServo.write(rightWingAngle);
 	// analogWrite(g_LeftWingServoPin, map(leftWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 255));
 	// analogWrite(g_RightWingServoPin, map(rightWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 255));
 	// analogWrite(g_LeftWingServoPin, 255);
@@ -121,8 +144,14 @@ void OutputSystem::handleHoverMode(float thrust, Vec3 outputs)
 
 void OutputSystem::handleCruiseMode(float thrust, Vec3 outputs)
 {
-	float leftMotorThrust = thrust;
-	float rightMotorThrust = thrust;
+	// Outputs range: -90 - 90
+	// Thrust range: 0 - 1000
+	// Servo range: 0 - 180
+
+	const auto mappedThrust = map(thrust, g_ThrottleInputMinimum, g_ThrottleInputMaximum, g_ServoMinimum, g_ServoMaximum);
+
+	float leftMotorThrust = mappedThrust;
+	float rightMotorThrust = mappedThrust;
 
 	float leftWingAngle = g_WingServoOffsetCruise;
 	float rightWingAngle = g_WingServoOffsetCruise;
@@ -135,14 +164,14 @@ void OutputSystem::handleCruiseMode(float thrust, Vec3 outputs)
 	// Handle roll
 
 	// Write to the motors
-	m_LeftMotor.write(map(leftMotorThrust, g_ThrottleInputMinimum, g_ThrottleInputMaximum, g_ServoMinimum, g_ServoMaximum));
-	m_RightMotor.write(map(rightMotorThrust, g_ThrottleInputMinimum, g_ThrottleInputMaximum, g_ServoMinimum, g_ServoMaximum));
+	m_LeftMotor.write(leftMotorThrust);
+	m_RightMotor.write(rightMotorThrust);
 
 	// Write to the wing servos.
-	m_LeftWingServo.write(map(leftWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, g_ServoMinimum, g_ServoMaximum));
-	m_RightWingServo.write(map(rightWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, g_ServoMinimum, g_ServoMaximum));
+	m_LeftWingServo.write(leftWingAngle);
+	m_RightWingServo.write(rightWingAngle);
 
 	// Write to the elevator and rudder.
-	m_ElevatorServo.write(map(elevatorAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, g_ServoMinimum, g_ServoMaximum));
-	m_RudderServo.write(map(rudderAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, g_ServoMinimum, g_ServoMaximum));
+	m_ElevatorServo.write(elevatorAngle);
+	m_RudderServo.write(rudderAngle);
 }

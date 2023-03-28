@@ -32,7 +32,7 @@ public:
 	 * @brief On get thrust pure virtual method.
 	 * When this method is called the data link should return the required thrust.
 	 *
-	 * @return The trust value (0 - 1000).
+	 * @return The thrust value.
 	 */
 	[[nodiscard]] virtual float onGetThrust() = 0;
 
@@ -40,7 +40,7 @@ public:
 	 * @brief On get pitch pure virtual method.
 	 * When this method is called the data link should return the required pitch value.
 	 *
-	 * @return The pitch value (0 - 100 - 200).
+	 * @return The pitch value.
 	 */
 	[[nodiscard]] virtual float onGetPitch() = 0;
 
@@ -48,7 +48,7 @@ public:
 	 * @brief On get roll pure virtual method.
 	 * When this method is called the data link should return the required roll value.
 	 *
-	 * @return The roll value (0 - 100 - 200).
+	 * @return The roll value.
 	 */
 	[[nodiscard]] virtual float onGetRoll() = 0;
 
@@ -56,7 +56,7 @@ public:
 	 * @brief On get yaw pure virtual method.
 	 * When this method is called the data link should return the required yaw value.
 	 *
-	 * @return The yaw value (0 - 100 - 200).
+	 * @return The yaw value.
 	 */
 	[[nodiscard]] virtual float onGetYaw() = 0;
 };
