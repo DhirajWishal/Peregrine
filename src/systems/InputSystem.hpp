@@ -19,7 +19,7 @@ public:
 	InputSystem() = default;
 
 	/**
-	 * @brief Initialize the input sytem.
+	 * @brief Initialize the input system.
 	 *
 	 * @param pDataLink The data link pointer.
 	 */

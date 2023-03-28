@@ -28,7 +28,7 @@ void setup()
 
 void loop()
 {
-	// Upate the input system.
+	// Update the input system.
 	InputSystem::Instance().update();
 
 	// Update the stabilization.

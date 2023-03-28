@@ -5,18 +5,6 @@
 
 #include "core/Constants.hpp"
 
-constexpr auto g_PitchKP = 0.001f;
-constexpr auto g_PitchKI = 0.01f;
-constexpr auto g_PitchKD = 1.0f;
-
-constexpr auto g_RollKP = 0.001f;
-constexpr auto g_RollKI = 0.01f;
-constexpr auto g_RollKD = 1.0f;
-
-constexpr auto g_YawKP = 0.001f;
-constexpr auto g_YawKI = 0.01f;
-constexpr auto g_YawKD = 1.0f;
-
 Stabilizer::Stabilizer()
 	: m_PitchStabilizer(g_PitchKP, g_PitchKI, g_PitchKD), m_RollStabilizer(g_RollKP, g_RollKI, g_RollKD), m_YawStabilizer(g_YawKP, g_YawKI, g_YawKD)
 {

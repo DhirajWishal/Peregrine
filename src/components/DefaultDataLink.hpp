@@ -19,7 +19,7 @@ public:
 
 	/**
 	 * @brief On initialize method.
-	 * This metod is intended to be used to initialize the data link.
+	 * This method is intended to be used to initialize the data link.
 	 */
 	void onInitialize() override;
 

@@ -87,7 +87,7 @@ void MPU6050::processAccelerometerData(sensors_event_t event)
 	}
 
 	if (abs(m_Accelerometer.m_Roll) > 90)
-		m_Gyroscope.m_Roll = -m_Gyroscope.m_Roll; // Invert rate, so it fits the restriced accelerometer reading
+		m_Gyroscope.m_Roll = -m_Gyroscope.m_Roll; // Invert rate, so it fits the restricted accelerometer reading
 
 	m_Accelerometer.m_Roll = m_RollFilter.compute(roll, m_Gyroscope.m_Roll, deltaTime); // Calculate the angle using a Kalman filter
 

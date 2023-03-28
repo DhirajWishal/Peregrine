@@ -8,6 +8,23 @@
 #include "algorithms/PID.hpp"
 
 /**
+ * @brief The PID algorithm uses some constants which can be tuned by the user to stabilize the incoming values.
+ * Edit the following constants to tune the PID stabilization (for each control axis).
+ */
+
+constexpr auto g_PitchKP = 0.001f;
+constexpr auto g_PitchKI = 0.01f;
+constexpr auto g_PitchKD = 1.0f;
+
+constexpr auto g_RollKP = 0.001f;
+constexpr auto g_RollKI = 0.01f;
+constexpr auto g_RollKD = 1.0f;
+
+constexpr auto g_YawKP = 0.001f;
+constexpr auto g_YawKI = 0.01f;
+constexpr auto g_YawKD = 1.0f;
+
+/**
  * @brief Stabilizer class.
  * This class runs the stabilization algorithm
  */

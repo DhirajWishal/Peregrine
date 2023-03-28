@@ -17,7 +17,7 @@ public:
 
 	/**
 	 * @brief On initialize pure virtual method.
-	 * This metod is intended to be used to initialize the data link.
+	 * This method is intended to be used to initialize the data link.
 	 * This method gets called once the data link is attached to the input system.
 	 */
 	virtual void onInitialize() = 0;

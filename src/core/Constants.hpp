@@ -3,14 +3,14 @@
 
 #pragma once
 
-// The drone is controlled using inputs and the motors and servos are controlled using outputs.
+// The drone is controlled using inputs and the rotors and servos are controlled using outputs.
 // Input limits should somewhat match the outputs. This makes processing simpler. Because at the end of the day, the outputs will be 0 - 180.
 //
 // Thrust has a higher range, from 0 to 1000.
-// Pitch, roll and yaw have a comparatively restriced 90 degrees.
+// Pitch, roll and yaw have a comparatively restricted 90 degrees.
 // The pitch, which involves the wing servos, can only travel 45 degrees on each mode. This means the controls can move 90 degrees maximum.
 // The roll, is a little different as on hover mode it could be mapped to the thrust value. But on cruise mode, the drone will use the wing servos
-// to control the drone. But as with the pitch, it could only move 45 degrees. This is why this value is also restriced to a maximum of 90 degrees.
+// to control the drone. But as with the pitch, it could only move 45 degrees. This is why this value is also restricted to a maximum of 90 degrees.
 // The yaw is the same as roll but is inverted; on hover mode, this uses the wing servos. This means it only has a 45 degree movement range. This is
 // why this too is restricted to 90 degrees.
 

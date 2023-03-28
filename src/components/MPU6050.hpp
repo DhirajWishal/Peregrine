@@ -34,7 +34,7 @@ public:
 	/**
 	 * @brief Get the temperature reading.
 	 *
-	 * @return The temperature reading in celcius.
+	 * @return The temperature reading in celsius.
 	 */
 	[[nodiscard]] float getTemperature() const { return m_Temperature; }
 

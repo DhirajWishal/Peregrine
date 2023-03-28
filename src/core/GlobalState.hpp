@@ -11,10 +11,10 @@
  */
 enum class FlyMode : uint8_t
 {
-	// Hover mode is when the drone starts from the ground to take off, or when is about to land (motors facing up).
+	// Hover mode is when the drone starts from the ground to take off, or when is about to land (rotors facing up).
 	Hover,
 
-	// Cruise mode is when the drone is flying (motors facing front).
+	// Cruise mode is when the drone is flying (rotors facing front).
 	Cruise
 };
 

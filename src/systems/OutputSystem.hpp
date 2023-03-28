@@ -9,8 +9,8 @@
 #ifndef PEREGRINE_BOARD_ESP32
 #include <Servo.h>
 
-constexpr auto g_LeftMotorPin = 11;
-constexpr auto g_RightMotorPin = 10;
+constexpr auto g_LeftRotorPin = 11;
+constexpr auto g_RightRotorPin = 10;
 
 constexpr auto g_LeftWingServoPin = 9;
 constexpr auto g_RightWingServoPin = 6;
@@ -20,8 +20,8 @@ constexpr auto g_RudderServoPin = 3;
 #else
 #include <ESP32Servo.h>
 
-constexpr auto g_LeftMotorPin = 32;
-constexpr auto g_RightMotorPin = 33;
+constexpr auto g_LeftRotorPin = 32;
+constexpr auto g_RightRotorPin = 33;
 
 constexpr auto g_LeftWingServoPin = 25;
 constexpr auto g_RightWingServoPin = 26;
@@ -32,7 +32,7 @@ constexpr auto g_RudderServoPin = 14;
 
 /**
  * @brief Output system class.
- * This class manages all the outputs, including the motors and controlling servos.
+ * This class manages all the outputs, including the rotors and controlling servos.
  */
 class OutputSystem final : public System<OutputSystem>
 {
@@ -72,8 +72,8 @@ private:
 	void handleCruiseMode(float thrust, Vec3 outputs);
 
 private:
-	Servo m_LeftMotor;
-	Servo m_RightMotor;
+	Servo m_LeftRotor;
+	Servo m_RightRotor;
 
 	Servo m_LeftWingServo;
 	Servo m_RightWingServo;
@@ -81,8 +81,8 @@ private:
 	Servo m_ElevatorServo;
 	Servo m_RudderServo;
 
-	int m_LeftMotorThrust = 0;
-	int m_RightMotorThrust = 0;
+	int m_LeftRotorThrust = 0;
+	int m_RightRotorThrust = 0;
 
 	int m_LeftWingAngle = 90;
 	int m_RightWingAngle = 90;

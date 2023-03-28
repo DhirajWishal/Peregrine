@@ -15,7 +15,7 @@ PID::PID(float kp, float ki, float kd)
 
 float PID::calculate(float current, float expected)
 {
-	// Calcualte the error, derivative and integral.
+	// Calculate the error, derivative and integral.
 	const auto error = expected - current;
 	const auto derivative = m_kD * (current - m_PreviousValue);
 	m_Integral = clamp(m_Integral + (m_kI * error), static_cast<float>(g_PIDOutputMinimum), static_cast<float>(g_PIDOutputMaximum));
