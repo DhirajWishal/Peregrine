@@ -8,11 +8,13 @@
 #include "components/DefaultDataLink.hpp"
 DefaultDataLink g_DefaultDataLink;
 
+#include "core/Logging.hpp"
+
 void setup()
 {
-	Serial.begin(115200);
-	Serial.println("Welcome to Peregrine!");
-	Serial.println("Initializing the controller.");
+	PEREGRINE_SETUP_LOGGING(115200);
+	PEREGRINE_PRINTLN("Welcome to Peregrine!");
+	PEREGRINE_PRINTLN("Initializing the controller.");
 
 	// Initialize the stabilizer.
 	Stabilizer::Instance().initialize();
@@ -23,7 +25,7 @@ void setup()
 	// Initialize the input system.
 	InputSystem::Instance().initialize(&g_DefaultDataLink);
 
-	Serial.println("The controller initialized. Entering the main loop.");
+	PEREGRINE_PRINTLN("The controller initialized. Entering the main loop.");
 }
 
 void loop()

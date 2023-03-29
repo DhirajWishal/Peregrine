@@ -4,6 +4,7 @@
 #include "Stabilizer.hpp"
 
 #include "core/Constants.hpp"
+#include "core/Logging.hpp"
 
 Stabilizer::Stabilizer()
 	: m_PitchStabilizer(g_PitchKP, g_PitchKI, g_PitchKD), m_RollStabilizer(g_RollKP, g_RollKI, g_RollKD), m_YawStabilizer(g_YawKP, g_YawKI, g_YawKD)
@@ -12,12 +13,12 @@ Stabilizer::Stabilizer()
 
 void Stabilizer::initialize()
 {
-	Serial.println("Initializing the Stabilizer.");
+	PEREGRINE_PRINTLN("Initializing the Stabilizer.");
 
 	// Initialize the sensor.
 	m_Sensor.initialize();
 
-	Serial.println("Stabilizer is initialized.");
+	PEREGRINE_PRINTLN("Stabilizer is initialized.");
 }
 
 void Stabilizer::update()

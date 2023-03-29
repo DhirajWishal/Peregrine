@@ -9,6 +9,7 @@
 #include "core/Common.hpp"
 #include "core/Constants.hpp"
 #include "core/GlobalState.hpp"
+#include "core/Logging.hpp"
 
 constexpr auto g_RotorMinPWM = 1000;
 constexpr auto g_RotorMaxPWM = 2000;
@@ -20,7 +21,7 @@ constexpr auto g_InputMidValue = 90;
 
 void OutputSystem::initialize()
 {
-	Serial.println("Initializing the output system.");
+	PEREGRINE_PRINTLN("Initializing the output system.");
 
 	// Attach the rotors.
 	m_LeftRotor.attach(g_LeftRotorPin, g_RotorMinPWM, g_RotorMaxPWM);
@@ -42,7 +43,7 @@ void OutputSystem::initialize()
 	m_ElevatorServo.write(g_ElevatorOffset);
 	m_RudderServo.write(g_RudderOffset);
 
-	Serial.println("Output system initialized.");
+	PEREGRINE_PRINTLN("Output system initialized.");
 }
 
 void OutputSystem::update()
@@ -102,28 +103,28 @@ void OutputSystem::handleHoverMode(float thrust, Vec3 outputs)
 	leftRotorThrust += outputs.m_Roll;
 	rightRotorThrust -= outputs.m_Roll;
 
-	// Clamp the values to the requried ranges.
+	// Clamp the values to the required ranges.
 	leftWingAngle = clamp(static_cast<int>(leftWingAngle), g_ServoMinimum, g_ServoMaximum);
 	rightWingAngle = clamp(static_cast<int>(rightWingAngle), g_ServoMinimum, g_ServoMaximum);
 
 	leftRotorThrust = clamp(static_cast<int>(leftRotorThrust), g_ServoMinimum, g_ServoMaximum);
 	rightRotorThrust = clamp(static_cast<int>(rightRotorThrust), g_ServoMinimum, g_ServoMaximum);
 
-	Serial.print("LMT: ");
-	Serial.print(leftRotorThrust);
-	Serial.print(" | RMT: ");
-	Serial.print(rightRotorThrust);
-	Serial.print(" | LWA: ");
-	Serial.print(leftWingAngle);
-	Serial.print(" | RWA: ");
-	Serial.print(rightWingAngle);
-	Serial.print(" | Pitch: ");
-	Serial.print(outputs.m_Pitch);
-	Serial.print(" | Roll: ");
-	Serial.print(outputs.m_Roll);
-	Serial.print(" | Yaw: ");
-	Serial.print(outputs.m_Yaw);
-	Serial.println();
+	PEREGRINE_PRINT("LMT: ");
+	PEREGRINE_PRINT(leftRotorThrust);
+	PEREGRINE_PRINT(" | RMT: ");
+	PEREGRINE_PRINT(rightRotorThrust);
+	PEREGRINE_PRINT(" | LWA: ");
+	PEREGRINE_PRINT(leftWingAngle);
+	PEREGRINE_PRINT(" | RWA: ");
+	PEREGRINE_PRINT(rightWingAngle);
+	PEREGRINE_PRINT(" | Pitch: ");
+	PEREGRINE_PRINT(outputs.m_Pitch);
+	PEREGRINE_PRINT(" | Roll: ");
+	PEREGRINE_PRINT(outputs.m_Roll);
+	PEREGRINE_PRINT(" | Yaw: ");
+	PEREGRINE_PRINT(outputs.m_Yaw);
+	PEREGRINE_PRINTLN();
 
 	// Write to the rotors
 	m_LeftRotor.write(leftRotorThrust);

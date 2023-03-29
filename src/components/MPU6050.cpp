@@ -5,8 +5,7 @@
 
 #include "core/Constants.hpp"
 #include "core/Common.hpp"
-
-#include <Arduino.h>
+#include "core/Logging.hpp"
 
 // 1 Rad/s = 57.2957795 deg/s
 constexpr auto g_RadiansToDegrees = 57.2957795f;
@@ -18,25 +17,28 @@ MPU6050::MPU6050()
 
 void MPU6050::initialize()
 {
-	Serial.println("Initializing the MPU6050 sensor.");
+	PEREGRINE_PRINTLN("Initializing the MPU6050 sensor.");
 
+#ifdef PEREGRINE_DEBUG
 	// Initialize the module.
 	if (!m_Module.begin())
 	{
-		Serial.println("Failed to find MPU6050 chip!");
+		PEREGRINE_PRINTLN("Failed to find MPU6050 chip!");
 		return;
 	}
+	
+#else
+	// Initialize the module.
+	m_Module.begin();
+
+#endif
 
 	// Setup the initial configuration.
 	m_Module.setAccelerometerRange(MPU6050_RANGE_8_G);
 	m_Module.setGyroRange(MPU6050_RANGE_500_DEG);
 	m_Module.setFilterBandwidth(MPU6050_BAND_21_HZ);
 
-	// Read initial data to store as offset.
-	// readData();
-	// m_AccelerometerOffset = m_Accelerometer;
-
-	Serial.println("MPU6050 sensor is initialized.");
+	PEREGRINE_PRINTLN("MPU6050 sensor is initialized.");
 }
 
 void MPU6050::readData()
@@ -91,14 +93,14 @@ void MPU6050::processAccelerometerData(sensors_event_t event)
 
 	m_Accelerometer.m_Roll = m_RollFilter.compute(roll, m_Gyroscope.m_Roll, deltaTime); // Calculate the angle using a Kalman filter
 
-	const auto gyroXrate = m_Gyroscope.m_X;
-	const auto gyroYrate = m_Gyroscope.m_Y;
+	const auto gyroXRate = m_Gyroscope.m_X;
+	const auto gyroYRate = m_Gyroscope.m_Y;
 
 	m_Gyroscope.m_X += m_Gyroscope.m_X * deltaTime; // Calculate gyro angle without any filter
 	m_Gyroscope.m_Y += m_Gyroscope.m_Y * deltaTime;
 
-	m_ComplementaryAngleX = 0.93 * (m_ComplementaryAngleX + gyroXrate * deltaTime) + 0.07 * roll; // Calculate the angle using a Complimentary filter
-	m_ComplementaryAngleY = 0.93 * (m_ComplementaryAngleY + gyroYrate * deltaTime) + 0.07 * pitch;
+	m_ComplementaryAngleX = 0.93 * (m_ComplementaryAngleX + gyroXRate * deltaTime) + 0.07 * roll; // Calculate the angle using a Complimentary filter
+	m_ComplementaryAngleY = 0.93 * (m_ComplementaryAngleY + gyroYRate * deltaTime) + 0.07 * pitch;
 
 	// Reset the gyro angle when it has drifted too much
 	if (m_Gyroscope.m_X < -180 || m_Gyroscope.m_X > 180)

@@ -3,22 +3,27 @@
 
 #include "InputSystem.hpp"
 
+#include "core/Logging.hpp"
+
 void InputSystem::initialize(IDataLink *pDataLink)
 {
-	Serial.println("Initializing the input system.");
+	PEREGRINE_PRINTLN("Initializing the input system.");
 	m_pDataLink = pDataLink;
 
+#ifdef PEREGRINE_DEBUG
 	// Validate the data link pointer.
 	if (!m_pDataLink)
 	{
-		Serial.println("The data link pointer is invalid!");
+		PEREGRINE_PRINTLN("The data link pointer is invalid!");
 		return;
 	}
+
+#endif
 
 	// Initialize the data link.
 	m_pDataLink->onInitialize();
 
-	Serial.println("The input system is initialized.");
+	PEREGRINE_PRINTLN("The input system is initialized.");
 }
 
 void InputSystem::update()
