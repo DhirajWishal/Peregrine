@@ -1,25 +1,12 @@
 # Peregrine
 
-Peregrine is a tilt-rotor/ tilt-wing VTOL controller designed to use an Arduino Uno, Arduino Micro, or an ESP32 board. This uses two rotors along with 4 servos (one for each wing, one for the elevator and the other for the rudder) to control the pitch, roll and yaw controls.
+Peregrine is a tilt-rotor/ tilt-wing VTOL controller designed to use an ESP32 board. This uses two rotors along with 4 servos (one for each wing, one for the elevator and the other for the rudder) to control the pitch, roll and yaw controls.
 
-## Arduino Uno/ Micro
-
-Both Arduino Uno and Micro use the same pins for rotor and servo controls.
-
-| Pin Number |       Usage      |
-|:----------:|:----------------:|
-|      3     |   Rudder servo   |
-|      5     |  Elevator servo  |
-|      6     | Right wing servo |
-|      9     |  Left wing servo |
-|     10     |    Right rotor   |
-|     11     |    Left rotor    |
-
-The MPU6050 sensor is attached to the `SCL` and `SDA` lines of the board(s) and given a 5v power (from the board or any other source which powers the board).
+The controller is compatible with Arduino although I haven't tested it. Arduino Uno or any other board which utilizes the ATmega328P chip might not have the required IO input/ outputs to connect everything together. So using a more advanced Arduino board might work.
 
 ## ESP32
 
-The ESP32 board uses a slightly different configuration compared to the Arduino boards.
+The controller only supports ESP32 boards out of the box. But it can be modified to work on other boards as well. Below are the pins that should be connected to different components (for an ESP32 dev board).
 
 | Pin Number |       Usage      |
 |:----------:|:----------------:|
@@ -30,7 +17,7 @@ The ESP32 board uses a slightly different configuration compared to the Arduino 
 |     33     |    Right rotor   |
 |     32     |    Left rotor    |
 
-The MPU6050 sensor is attached similarly to the Arduino boards, to the `SCL` and `SDA` pins of the board. But since the ESP32 dev board does not have a 5v output (just a VIN pin), you need to use the external supply which is used to power the board to power the sensor.
+The MPU6050 sensor is attached to the `SCL` and `SDA` pins of the board. But since the ESP32 dev board does not have a 5v output (just a VIN pin), you need to use the external supply which is used to power the board to power the sensor.
 
 ## Connecting everything together
 

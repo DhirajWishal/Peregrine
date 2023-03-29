@@ -20,7 +20,7 @@ void setup()
 	// Initialize the output system.
 	OutputSystem::Instance().initialize();
 
-	// Initialize the input sytem.
+	// Initialize the input system.
 	InputSystem::Instance().initialize(&g_DefaultDataLink);
 
 	Serial.println("The controller initialized. Entering the main loop.");
