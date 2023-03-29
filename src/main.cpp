@@ -5,8 +5,19 @@
 #include "systems/Stabilizer.hpp"
 #include "systems/InputSystem.hpp"
 
+#if defined(PEREGRINE_DATA_LINK_FS_I6)
+#include "components/FSi6DataLink.hpp"
+FSi6DataLink g_CurrentDataLink;
+
+#elif defined(PEREGRINE_DATA_LINK_NRF24L01)
 #include "components/DefaultDataLink.hpp"
-DefaultDataLink g_DefaultDataLink;
+DefaultDataLink g_CurrentDataLink;
+
+#else
+#include "components/DefaultDataLink.hpp"
+DefaultDataLink g_CurrentDataLink;
+
+#endif
 
 #include "core/Logging.hpp"
 
@@ -23,7 +34,7 @@ void setup()
 	OutputSystem::Instance().initialize();
 
 	// Initialize the input system.
-	InputSystem::Instance().initialize(&g_DefaultDataLink);
+	InputSystem::Instance().initialize(&g_CurrentDataLink);
 
 	PEREGRINE_PRINTLN("The controller initialized. Entering the main loop.");
 }
