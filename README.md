@@ -2,7 +2,7 @@
 
 Peregrine is a tilt-rotor/ tilt-wing VTOL controller designed to use an ESP32 board. This uses two rotors along with 4 servos (one for each wing, one for the elevator and the other for the rudder) to control the pitch, roll and yaw controls.
 
-The controller is compatible with Arduino although I haven't tested it. Arduino Uno or any other board which utilizes the ATmega328P chip might not have the required IO input/ outputs to connect everything together. So using a more advanced Arduino board might work.
+The controller is compatible with Arduino although I haven't tested it. Arduino Uno or any other board which utilizes the ATmega328P chip might not have the required IO pins to connect everything together. So using a more advanced Arduino board might work.
 
 ## ESP32
 
@@ -39,7 +39,7 @@ First and foremost, download or clone this repository to a local directory.
 git clone https://github.com/DhirajWishal/Peregrine {SOURCE}
 ```
 
-*Here `{SOURCE}` stands for whichever location you clone this repository to*
+*Here `{SOURCE}` stands for whichever location you clone this repository to.*
 
 After this, if you may have noticed, this project is based on [PlatformIO](https://platformio.org/). Make sure that you have it installed to use this controller. And if you don't have it, while it's being installed, make sure you have all the necessary drivers.
 
