@@ -25,7 +25,7 @@ jobs:
         run: pip install --upgrade platformio
         
       - name: Build Debug
-        run: pio run --target esp32-debug
+        run: pio run --environment esp32-debug
 
       - name: Build Release
-        run: pio run --target esp32-release
+        run: pio run --environment esp32-release
