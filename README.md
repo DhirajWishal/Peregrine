@@ -45,6 +45,15 @@ After this, if you may have noticed, this project is based on [PlatformIO](https
 
 Once everything is ready, go ahead and connect the board to your computer. PlatformIO will attempt to automatically select the correct port but if it failed, make sure to select it manually. Afterwards, you can upload the code and monitor the output.
 
+### Enabling/ disabling features
+
+The `core/Configuration.hpp` file contains a couple of pre-compiler definitions which can be commented/ uncommented out for different features.
+
+- Uncomment/ comment out the `PEREGRINE_DATA_LINK_FS_I6` pre-compiler definition if you're using the FS-i6 receiver to control the drone.
+- Uncomment/ comment out the `PEREGRINE_DATA_LINK_NRF24L01` pre-compiler definition if you're using the NRF24L01[+PA+LNA] transceiver to control the drone.
+
+*Note that multiple related features can be enabled/ disable in which case a default or the best will be chosen.*
+
 ## License
 
 This project is licensed under Apache-2.0.

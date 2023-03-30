@@ -4,6 +4,7 @@
 #include "systems/OutputSystem.hpp"
 #include "systems/Stabilizer.hpp"
 #include "systems/InputSystem.hpp"
+#include "core/Configuration.hpp"
 
 #if defined(PEREGRINE_DATA_LINK_FS_I6)
 #include "components/FSi6DataLink.hpp"

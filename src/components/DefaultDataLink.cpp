@@ -3,8 +3,12 @@
 
 #include "DefaultDataLink.hpp"
 
+#include "core/Logging.hpp"
+
 void DefaultDataLink::onInitialize()
 {
+	PEREGRINE_PRINTLN("Initializing the default data link.");
+	PEREGRINE_PRINTLN("The default data link initialized.");
 }
 
 void DefaultDataLink::onUpdate()

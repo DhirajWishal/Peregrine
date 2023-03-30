@@ -110,21 +110,21 @@ void OutputSystem::handleHoverMode(float thrust, Vec3 outputs)
 	leftRotorThrust = clamp(static_cast<int>(leftRotorThrust), g_ServoMinimum, g_ServoMaximum);
 	rightRotorThrust = clamp(static_cast<int>(rightRotorThrust), g_ServoMinimum, g_ServoMaximum);
 
-	PEREGRINE_PRINT("LMT: ");
-	PEREGRINE_PRINT(leftRotorThrust);
-	PEREGRINE_PRINT(" | RMT: ");
-	PEREGRINE_PRINT(rightRotorThrust);
-	PEREGRINE_PRINT(" | LWA: ");
-	PEREGRINE_PRINT(leftWingAngle);
-	PEREGRINE_PRINT(" | RWA: ");
-	PEREGRINE_PRINT(rightWingAngle);
-	PEREGRINE_PRINT(" | Pitch: ");
-	PEREGRINE_PRINT(outputs.m_Pitch);
-	PEREGRINE_PRINT(" | Roll: ");
-	PEREGRINE_PRINT(outputs.m_Roll);
-	PEREGRINE_PRINT(" | Yaw: ");
-	PEREGRINE_PRINT(outputs.m_Yaw);
-	PEREGRINE_PRINTLN();
+	// PEREGRINE_PRINT("LMT: ");
+	// PEREGRINE_PRINT(leftRotorThrust);
+	// PEREGRINE_PRINT(" | RMT: ");
+	// PEREGRINE_PRINT(rightRotorThrust);
+	// PEREGRINE_PRINT(" | LWA: ");
+	// PEREGRINE_PRINT(leftWingAngle);
+	// PEREGRINE_PRINT(" | RWA: ");
+	// PEREGRINE_PRINT(rightWingAngle);
+	// PEREGRINE_PRINT(" | Pitch: ");
+	// PEREGRINE_PRINT(outputs.m_Pitch);
+	// PEREGRINE_PRINT(" | Roll: ");
+	// PEREGRINE_PRINT(outputs.m_Roll);
+	// PEREGRINE_PRINT(" | Yaw: ");
+	// PEREGRINE_PRINT(outputs.m_Yaw);
+	// PEREGRINE_PRINTLN();
 
 	// Write to the rotors
 	m_LeftRotor.write(leftRotorThrust);

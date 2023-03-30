@@ -8,10 +8,19 @@
 #include <cstddef>
 #include <IBusBM.h>
 
-constexpr auto g_ThrustChannel = 3;
-constexpr auto g_PitchChannel = 2;
-constexpr auto g_RollChannel = 1;
-constexpr auto g_YawChannel = 4;
+/**
+ * @brief FS-i6 input channel enum.
+ * This contains all the supported input channels of the receiver.
+ */
+enum class FSi6InputChannel : uint8_t
+{
+	Throttle = 2,
+	Pitch = 1,
+	Roll = 0,
+	Yaw = 3,
+
+	Thrust = Throttle
+};
 
 constexpr auto g_ChannelMinimum = 1000;
 constexpr auto g_ChannelMaximum = 2000;
@@ -48,7 +57,7 @@ public:
 	 *
 	 * @return The thrust value.
 	 */
-	[[nodiscard]] float onGetThrust() override;
+	[[nodiscard]] float onGetThrust() override { return m_Throttle; }
 
 	/**
 	 * @brief On get pitch method.
@@ -56,7 +65,7 @@ public:
 	 *
 	 * @return The pitch value.
 	 */
-	[[nodiscard]] float onGetPitch() override;
+	[[nodiscard]] float onGetPitch() override { return m_Pitch; }
 
 	/**
 	 * @brief On get roll method.
@@ -64,7 +73,7 @@ public:
 	 *
 	 * @return The roll value.
 	 */
-	[[nodiscard]] float onGetRoll() override;
+	[[nodiscard]] float onGetRoll() override { return m_Roll; }
 
 	/**
 	 * @brief On get yaw method.
@@ -72,7 +81,7 @@ public:
 	 *
 	 * @return The yaw value.
 	 */
-	[[nodiscard]] float onGetYaw() override;
+	[[nodiscard]] float onGetYaw() override { return m_Yaw; }
 
 private:
 	/**
@@ -85,7 +94,7 @@ private:
 	 * @param defaultValue The channel's default value. It's set to 0 by default.
 	 * @return The incoming value.
 	 */
-	[[nodiscard]] int readChannel(uint8_t channel, int minimum, int maximum, int defaultValue = 0);
+	[[nodiscard]] int readChannel(FSi6InputChannel channel, int minimum, int maximum, int defaultValue = 0);
 
 	/**
 	 * @brief Read boolean data from the iBus interface.
@@ -96,8 +105,13 @@ private:
 	 * @return true If the switch is on.
 	 * @return false If the switch is off.
 	 */
-	[[nodiscard]] bool readChannelBool(uint8_t channel, bool defaultValue = false);
+	[[nodiscard]] bool readChannelBool(FSi6InputChannel channel, bool defaultValue = false);
 
 private:
 	IBusBM m_Connection;
+
+	float m_Throttle = 0;
+	float m_Pitch = 0;
+	float m_Roll = 0;
+	float m_Yaw = 0;
 };
