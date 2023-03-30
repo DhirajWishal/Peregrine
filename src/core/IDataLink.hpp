@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "GlobalState.hpp"
+
 /**
  * @brief Data link interface class.
  * All data links are required to be derived from this class and attached to the input system when initialized.

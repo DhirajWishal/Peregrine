@@ -19,6 +19,9 @@ enum class FSi6InputChannel : uint8_t
 	Roll = 0,
 	Yaw = 3,
 
+	Aux1 = 4, // This is used to switch between FlyModes.
+	Aux2 = 5,
+
 	Thrust = Throttle
 };
 

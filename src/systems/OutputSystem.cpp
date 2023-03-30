@@ -106,7 +106,9 @@ void OutputSystem::handleHoverMode(float thrust, Vec3 outputs)
 	leftRotorThrust = clamp(static_cast<int>(leftRotorThrust), g_ServoMinimum, g_ServoMaximum);
 	rightRotorThrust = clamp(static_cast<int>(rightRotorThrust), g_ServoMinimum, g_ServoMaximum);
 
-	PEREGRINE_PRINT("LMT: ");
+	// Print everything.
+	PEREGRINE_PRINT("FlyMode: Hover");
+	PEREGRINE_PRINT(" | LMT: ");
 	PEREGRINE_PRINT(leftRotorThrust);
 	PEREGRINE_PRINT(" | RMT: ");
 	PEREGRINE_PRINT(rightRotorThrust);
@@ -153,8 +155,36 @@ void OutputSystem::handleCruiseMode(float thrust, Vec3 outputs)
 	float rudderAngle = g_RudderOffset;
 
 	// Handle pitch
+	leftWingAngle += outputs.m_Pitch;
+	rightWingAngle += outputs.m_Pitch;
+	elevatorAngle += outputs.m_Pitch;
+
 	// Handle yaw
+	leftRotorThrust += outputs.m_Yaw;
+	rightRotorThrust -= outputs.m_Yaw;
+	rudderAngle += outputs.m_Pitch;
+
 	// Handle roll
+	leftWingAngle += outputs.m_Roll;
+	rightWingAngle -= outputs.m_Roll;
+
+	// Print everything.
+	PEREGRINE_PRINT("FlyMode: Cruise");
+	PEREGRINE_PRINT(" | LMT: ");
+	PEREGRINE_PRINT(leftRotorThrust);
+	PEREGRINE_PRINT(" | RMT: ");
+	PEREGRINE_PRINT(rightRotorThrust);
+	PEREGRINE_PRINT(" | LWA: ");
+	PEREGRINE_PRINT(leftWingAngle);
+	PEREGRINE_PRINT(" | RWA: ");
+	PEREGRINE_PRINT(rightWingAngle);
+	PEREGRINE_PRINT(" | Pitch: ");
+	PEREGRINE_PRINT(outputs.m_Pitch);
+	PEREGRINE_PRINT(" | Roll: ");
+	PEREGRINE_PRINT(outputs.m_Roll);
+	PEREGRINE_PRINT(" | Yaw: ");
+	PEREGRINE_PRINT(outputs.m_Yaw);
+	PEREGRINE_PRINTLN();
 
 	// Write to the rotors
 	m_LeftRotor.write(leftRotorThrust);
@@ -165,6 +195,6 @@ void OutputSystem::handleCruiseMode(float thrust, Vec3 outputs)
 	m_RightWingServo.write(180 - map(rightWingAngle, 0, 180, 90, 180));
 
 	// Write to the elevator and rudder.
-	m_ElevatorServo.write(elevatorAngle);
-	m_RudderServo.write(rudderAngle);
+	m_ElevatorServo.write(map(elevatorAngle, 0, 180, 45, 135));
+	m_RudderServo.write(map(rudderAngle, 0, 180, 45, 135));
 }

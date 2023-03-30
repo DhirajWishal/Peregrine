@@ -21,6 +21,9 @@ void FSi6DataLink::onUpdate()
 	m_Pitch = readChannel(FSi6InputChannel::Pitch, g_PitchInputMinimum, g_PitchInputMaximum, g_PitchInputMinimum);
 	m_Roll = readChannel(FSi6InputChannel::Roll, g_RollInputMinimum, g_RollInputMaximum, g_RollInputMinimum);
 	m_Yaw = readChannel(FSi6InputChannel::Yaw, g_YawInputMinimum, g_YawInputMaximum, g_YawInputMinimum);
+	
+	g_RequiredFlyMode = readChannelBool(FSi6InputChannel::Aux1, true) ? FlyMode::Cruise : FlyMode::Hover;
+	g_CurrentFlyMode = g_RequiredFlyMode;
 }
 
 int FSi6DataLink::readChannel(FSi6InputChannel channel, int minimum, int maximum, int defaultValue)
@@ -35,5 +38,7 @@ int FSi6DataLink::readChannel(FSi6InputChannel channel, int minimum, int maximum
 bool FSi6DataLink::readChannelBool(FSi6InputChannel channel, bool defaultValue)
 {
 	const auto value = readChannel(channel, g_ChannelMinimum, g_ChannelMaximum, defaultValue ? 1 : -1);
-	return value > 0;
+
+	constexpr auto midValue = (g_ChannelMinimum + ((g_ChannelMaximum - g_ChannelMinimum) / 2));
+	return value > midValue;
 }
