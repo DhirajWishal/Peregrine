@@ -79,10 +79,6 @@ void OutputSystem::update()
 
 void OutputSystem::handleHoverMode(float thrust, Vec3 outputs)
 {
-	// Outputs range: -90 - 90
-	// Thrust range: 0 - 1000
-	// Servo range: 0 - 180
-
 	const auto mappedThrust = map(thrust, g_ThrottleInputMinimum, g_ThrottleInputMaximum, g_ServoMinimum, g_ServoMaximum);
 
 	float leftRotorThrust = mappedThrust;
@@ -131,12 +127,8 @@ void OutputSystem::handleHoverMode(float thrust, Vec3 outputs)
 	m_RightRotor.write(rightRotorThrust);
 
 	// Write to the wing servos.
-	m_LeftWingServo.write(leftWingAngle);
-	m_RightWingServo.write(180 - rightWingAngle);
-	// analogWrite(g_LeftWingServoPin, map(leftWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 255));
-	// analogWrite(g_RightWingServoPin, map(rightWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 255));
-	// analogWrite(g_LeftWingServoPin, 255);
-	// analogWrite(g_RightWingServoPin, 255);
+	m_LeftWingServo.write(map(leftWingAngle, 0, 180, 0, 90));
+	m_RightWingServo.write(180 - map(rightWingAngle, 0, 180, 0, 90));
 
 	// Write to the elevator and rudder.
 	m_ElevatorServo.write(g_ElevatorOffset);
@@ -169,8 +161,8 @@ void OutputSystem::handleCruiseMode(float thrust, Vec3 outputs)
 	m_RightRotor.write(rightRotorThrust);
 
 	// Write to the wing servos.
-	m_LeftWingServo.write(leftWingAngle);
-	m_RightWingServo.write(180 - rightWingAngle);
+	m_LeftWingServo.write(map(leftWingAngle, 0, 180, 90, 180));
+	m_RightWingServo.write(180 - map(rightWingAngle, 0, 180, 90, 180));
 
 	// Write to the elevator and rudder.
 	m_ElevatorServo.write(elevatorAngle);
