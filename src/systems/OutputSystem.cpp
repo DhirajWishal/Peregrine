@@ -96,8 +96,8 @@ void OutputSystem::handleHoverMode(float thrust, Vec3 outputs)
 	rightWingAngle += outputs.m_Pitch;
 
 	// Handle yaw
-	leftWingAngle -= outputs.m_Yaw;
-	rightWingAngle += outputs.m_Yaw;
+	leftWingAngle += outputs.m_Yaw;
+	rightWingAngle -= outputs.m_Yaw;
 
 	// Handle roll
 	leftRotorThrust += outputs.m_Roll;
@@ -110,21 +110,21 @@ void OutputSystem::handleHoverMode(float thrust, Vec3 outputs)
 	leftRotorThrust = clamp(static_cast<int>(leftRotorThrust), g_ServoMinimum, g_ServoMaximum);
 	rightRotorThrust = clamp(static_cast<int>(rightRotorThrust), g_ServoMinimum, g_ServoMaximum);
 
-	// PEREGRINE_PRINT("LMT: ");
-	// PEREGRINE_PRINT(leftRotorThrust);
-	// PEREGRINE_PRINT(" | RMT: ");
-	// PEREGRINE_PRINT(rightRotorThrust);
-	// PEREGRINE_PRINT(" | LWA: ");
-	// PEREGRINE_PRINT(leftWingAngle);
-	// PEREGRINE_PRINT(" | RWA: ");
-	// PEREGRINE_PRINT(rightWingAngle);
-	// PEREGRINE_PRINT(" | Pitch: ");
-	// PEREGRINE_PRINT(outputs.m_Pitch);
-	// PEREGRINE_PRINT(" | Roll: ");
-	// PEREGRINE_PRINT(outputs.m_Roll);
-	// PEREGRINE_PRINT(" | Yaw: ");
-	// PEREGRINE_PRINT(outputs.m_Yaw);
-	// PEREGRINE_PRINTLN();
+	PEREGRINE_PRINT("LMT: ");
+	PEREGRINE_PRINT(leftRotorThrust);
+	PEREGRINE_PRINT(" | RMT: ");
+	PEREGRINE_PRINT(rightRotorThrust);
+	PEREGRINE_PRINT(" | LWA: ");
+	PEREGRINE_PRINT(leftWingAngle);
+	PEREGRINE_PRINT(" | RWA: ");
+	PEREGRINE_PRINT(rightWingAngle);
+	PEREGRINE_PRINT(" | Pitch: ");
+	PEREGRINE_PRINT(outputs.m_Pitch);
+	PEREGRINE_PRINT(" | Roll: ");
+	PEREGRINE_PRINT(outputs.m_Roll);
+	PEREGRINE_PRINT(" | Yaw: ");
+	PEREGRINE_PRINT(outputs.m_Yaw);
+	PEREGRINE_PRINTLN();
 
 	// Write to the rotors
 	m_LeftRotor.write(leftRotorThrust);
@@ -132,7 +132,7 @@ void OutputSystem::handleHoverMode(float thrust, Vec3 outputs)
 
 	// Write to the wing servos.
 	m_LeftWingServo.write(leftWingAngle);
-	m_RightWingServo.write(rightWingAngle);
+	m_RightWingServo.write(180 - rightWingAngle);
 	// analogWrite(g_LeftWingServoPin, map(leftWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 255));
 	// analogWrite(g_RightWingServoPin, map(rightWingAngle, g_RotationalInputMinimum, g_RotationalInputMaximum, 0, 255));
 	// analogWrite(g_LeftWingServoPin, 255);
@@ -170,7 +170,7 @@ void OutputSystem::handleCruiseMode(float thrust, Vec3 outputs)
 
 	// Write to the wing servos.
 	m_LeftWingServo.write(leftWingAngle);
-	m_RightWingServo.write(rightWingAngle);
+	m_RightWingServo.write(180 - rightWingAngle);
 
 	// Write to the elevator and rudder.
 	m_ElevatorServo.write(elevatorAngle);

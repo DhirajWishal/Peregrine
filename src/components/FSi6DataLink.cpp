@@ -22,15 +22,15 @@ void FSi6DataLink::onUpdate()
 	m_Roll = readChannel(FSi6InputChannel::Roll, g_RollInputMinimum, g_RollInputMaximum, g_RollInputMinimum);
 	m_Yaw = readChannel(FSi6InputChannel::Yaw, g_YawInputMinimum, g_YawInputMaximum, g_YawInputMinimum);
 
-	PEREGRINE_PRINT("Throttle: ");
-	PEREGRINE_PRINT(m_Throttle);
-	PEREGRINE_PRINT(" | Pitch: ");
-	PEREGRINE_PRINT(m_Pitch);
-	PEREGRINE_PRINT(" | Roll: ");
-	PEREGRINE_PRINT(m_Roll);
-	PEREGRINE_PRINT(" | Yaw: ");
-	PEREGRINE_PRINT(m_Yaw);
-	PEREGRINE_PRINTLN();
+	// PEREGRINE_PRINT("Throttle: ");
+	// PEREGRINE_PRINT(m_Throttle);
+	// PEREGRINE_PRINT(" | Pitch: ");
+	// PEREGRINE_PRINT(m_Pitch);
+	// PEREGRINE_PRINT(" | Roll: ");
+	// PEREGRINE_PRINT(m_Roll);
+	// PEREGRINE_PRINT(" | Yaw: ");
+	// PEREGRINE_PRINT(m_Yaw);
+	// PEREGRINE_PRINTLN();
 }
 
 int FSi6DataLink::readChannel(FSi6InputChannel channel, int minimum, int maximum, int defaultValue)

@@ -11,7 +11,7 @@
  */
 inline void NoOp() {}
 
-#ifdef PEREGRINE_DEBUG
+#if defined(PEREGRINE_DEBUG) || defined(PEREGRINE_PRODUCTION_TEST)
 #define PEREGRINE_SETUP_LOGGING(bound) Serial.begin(bound)
 #define PEREGRINE_PRINT(...) Serial.print(__VA_ARGS__)
 #define PEREGRINE_PRINTLN(...) Serial.println(__VA_ARGS__)
