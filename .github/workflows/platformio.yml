@@ -27,5 +27,8 @@ jobs:
       - name: Build Debug
         run: pio run --environment esp32-debug
 
+      - name: Build Production Test
+        run: pio run --environment esp32-production-test
+
       - name: Build Release
         run: pio run --environment esp32-release
