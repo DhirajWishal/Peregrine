@@ -28,5 +28,15 @@ void InputSystem::initialize(IDataLink *pDataLink)
 
 void InputSystem::update()
 {
+#ifdef PEREGRINE_DEBUG
+	// Validate the data link pointer.
+	if (!m_pDataLink)
+	{
+		PEREGRINE_PRINTLN("The data link pointer is invalid!");
+		return;
+	}
+
+#endif
+
 	m_pDataLink->onUpdate();
 }

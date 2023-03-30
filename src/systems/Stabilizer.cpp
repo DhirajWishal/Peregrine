@@ -29,11 +29,12 @@ void Stabilizer::update()
 Vec3 Stabilizer::computeOutputs(float thrust, float pitch, float roll, float yaw)
 {
 	const auto angles = m_Sensor.getAcceleration();
-	// const auto rotationRate = m_Sensor.getGyration();
-
 	const auto outputPitch = m_PitchStabilizer.calculate(angles.m_Pitch, pitch);
-	const auto outputYaw = m_YawStabilizer.calculate(angles.m_Yaw, yaw);
 	const auto outputRoll = m_RollStabilizer.calculate(angles.m_Roll, roll);
+
+	// Since we don't have a way to calculate yaw properly using the sensor (unless we have a magnetometer), use the gyration.
+	const auto rotationRate = m_Sensor.getGyration();
+	const auto outputYaw = m_YawStabilizer.calculate(rotationRate.m_Yaw, yaw);
 
 	return Vec3(outputPitch, outputYaw, outputRoll);
 }

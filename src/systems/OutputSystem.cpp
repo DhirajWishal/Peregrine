@@ -139,10 +139,6 @@ void OutputSystem::handleHoverMode(float thrust, Vec3 outputs)
 
 void OutputSystem::handleCruiseMode(float thrust, Vec3 outputs)
 {
-	// Outputs range: -90 - 90
-	// Thrust range: 0 - 1000
-	// Servo range: 0 - 180
-
 	const auto mappedThrust = map(thrust, g_ThrottleInputMinimum, g_ThrottleInputMaximum, g_ServoMinimum, g_ServoMaximum);
 
 	float leftRotorThrust = mappedThrust;
@@ -168,6 +164,16 @@ void OutputSystem::handleCruiseMode(float thrust, Vec3 outputs)
 	leftWingAngle += outputs.m_Roll;
 	rightWingAngle -= outputs.m_Roll;
 
+	// Clamp the values to the required ranges.
+	leftWingAngle = clamp(static_cast<int>(leftWingAngle), g_ServoMinimum, g_ServoMaximum);
+	rightWingAngle = clamp(static_cast<int>(rightWingAngle), g_ServoMinimum, g_ServoMaximum);
+
+	leftRotorThrust = clamp(static_cast<int>(leftRotorThrust), g_ServoMinimum, g_ServoMaximum);
+	rightRotorThrust = clamp(static_cast<int>(rightRotorThrust), g_ServoMinimum, g_ServoMaximum);
+
+	elevatorAngle = clamp(static_cast<int>(elevatorAngle), g_ServoMinimum, g_ServoMaximum);
+	rudderAngle = clamp(static_cast<int>(rudderAngle), g_ServoMinimum, g_ServoMaximum);
+
 	// Print everything.
 	PEREGRINE_PRINT("FlyMode: Cruise");
 	PEREGRINE_PRINT(" | LMT: ");
@@ -178,6 +184,10 @@ void OutputSystem::handleCruiseMode(float thrust, Vec3 outputs)
 	PEREGRINE_PRINT(leftWingAngle);
 	PEREGRINE_PRINT(" | RWA: ");
 	PEREGRINE_PRINT(rightWingAngle);
+	PEREGRINE_PRINT(" | Elevator: ");
+	PEREGRINE_PRINT(elevatorAngle);
+	PEREGRINE_PRINT(" | Rudder: ");
+	PEREGRINE_PRINT(rudderAngle);
 	PEREGRINE_PRINT(" | Pitch: ");
 	PEREGRINE_PRINT(outputs.m_Pitch);
 	PEREGRINE_PRINT(" | Roll: ");
