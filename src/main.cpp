@@ -4,6 +4,8 @@
 #include "systems/OutputSystem.hpp"
 #include "systems/Stabilizer.hpp"
 #include "systems/InputSystem.hpp"
+#include "systems/WiFiSystem.hpp"
+
 #include "core/Configuration.hpp"
 
 #if defined(PEREGRINE_DATA_LINK_FS_I6)
@@ -28,6 +30,9 @@ void setup()
 	PEREGRINE_PRINTLN("Welcome to Peregrine!");
 	PEREGRINE_PRINTLN("Initializing the controller.");
 
+	// Initialize the WiFi system.
+	WiFiSystem::Instance().initialize();
+
 	// Initialize the stabilizer.
 	Stabilizer::Instance().initialize();
 
@@ -42,6 +47,9 @@ void setup()
 
 void loop()
 {
+	// Update the WiFi system.
+	WiFiSystem::Instance().update();
+
 	// Update the input system.
 	InputSystem::Instance().update();
 
