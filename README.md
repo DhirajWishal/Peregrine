@@ -68,6 +68,10 @@ The `core/Configuration.hpp` file contains a couple of pre-compiler definitions 
 
 *Note that multiple related features can be enabled/ disable in which case a default or the best will be chosen.*
 
+## More info
+
+For more information on different things, please go to our [Wiki](https://github.com/DhirajWishal/Peregrine/wiki) page.
+
 ## License
 
 This project is licensed under Apache-2.0.

@@ -5,6 +5,8 @@
 
 #include "core/System.hpp"
 
+#include <AsyncUDP.h>
+
 // Set your WiFi SSID here.
 constexpr auto g_SSID = "SSID";
 
@@ -41,4 +43,15 @@ private:
 	 * @return false If the required WiFi does not exist (after scanning).
 	 */
 	[[nodiscard]] bool exists() const;
+
+	/**
+	 * @brief Message handler function.
+	 * This message gets called when a message is received.
+	 *
+	 * @param packet The data packet.
+	 */
+	void onMessage(AsyncUDPPacket &packet);
+
+private:
+	AsyncUDP m_UDP;
 };

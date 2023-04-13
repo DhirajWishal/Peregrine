@@ -6,6 +6,13 @@
 #include "core/Logging.hpp"
 
 #include <WiFi.h>
+#include <HTTPClient.h>
+#include <HTTPUpdate.h>
+
+WiFiClient g_Client;
+WiFiServer g_Server;
+
+constexpr auto g_Port = 58789;
 
 void WiFiSystem::initialize()
 {
@@ -19,6 +26,8 @@ void WiFiSystem::initialize()
 		// Begin the wifi connection.
 		WiFi.begin(g_SSID, g_Password);
 
+		WiFi.broadcastIP();
+
 		// Try to connect.
 		uint8_t tries = 2 /* minutes */ * 60 /* seconds */ * 2 /* 500 ms */;
 		while (WiFi.status() != WL_CONNECTED && tries > 0)
@@ -31,10 +40,26 @@ void WiFiSystem::initialize()
 
 		PEREGRINE_PRINTLN();
 		if (tries == 0)
+		{
 			PEREGRINE_PRINTLN("Failed to connect to the WiFi!");
-
+		}
 		else
+		{
 			PEREGRINE_PRINTLN("Successfully connected to the WiFi!");
+
+			// Setup the UDP handler.
+			if (m_UDP.listen(g_Port))
+			{
+				PEREGRINE_PRINT("Broadcasting message: ");
+				PEREGRINE_PRINTLN(m_UDP.broadcastTo("From the controller", g_Port));
+
+				g_Server.begin(g_Port);
+			}
+			else
+			{
+				PEREGRINE_PRINTLN("Failed to listen to UDP broadcast IP.");
+			}
+		}
 	}
 	else
 	{
@@ -44,6 +69,24 @@ void WiFiSystem::initialize()
 
 void WiFiSystem::update()
 {
+	// // Notify the server that we're here.
+	// m_UDP.broadcastTo("Hello from the controller!", g_Port);
+
+	// Serial.println("Client connecting...");
+	// HTTPClient client;
+	// client.begin(WiFi.broadcastIP().toString(), g_Port);
+	// const auto result = client.GET();
+	// Serial.printf("Client response: %i\n", result);
+
+	// delay(1000);
+	// if (g_Server.hasClient())
+	// {
+	// 	auto client = g_Server.accept();
+	// 	const auto string = client.readString();
+	// 	PEREGRINE_PRINT("Received string: ");
+	// 	PEREGRINE_PRINTLN(string);
+	// 	client.write("Hello from the controller!");
+	// }
 }
 
 bool WiFiSystem::exists() const
@@ -71,4 +114,11 @@ bool WiFiSystem::exists() const
 
 	// Else return false.
 	return isAvailable;
+}
+
+void WiFiSystem::onMessage(AsyncUDPPacket &packet)
+{
+	PEREGRINE_PRINTLN("Data packet received!");
+	PEREGRINE_PRINT("Received string: ");
+	PEREGRINE_PRINTLN(packet.readString());
 }
