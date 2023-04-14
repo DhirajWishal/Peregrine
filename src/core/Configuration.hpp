@@ -8,3 +8,9 @@
 
 // Uncomment this if you're using the NRF24L01 receiver.
 // #define PEREGRINE_DATA_LINK_NRF24L01
+
+// If the PEREGRINE_VERSION definition is not defined, use the default "Undefined" string.
+#ifndef PEREGRINE_VERSION
+#define PEREGRINE_VERSION "Undefined"
+
+#endif
