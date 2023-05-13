@@ -19,7 +19,7 @@ jobs:
 
           git config --global user.name ${{ github.actor }} 
           git config --global user.email ${{ github.actor }}@users.noreply.github.com
-          git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/Nexonous/Documentation
+          git clone https://github.com/Nexonous/Documentation
           cd Documentation
 
           git checkout -b update/$PEREGRINE_VERSION
