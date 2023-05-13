@@ -43,10 +43,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OWNER: ${{ github.repository_owner }}
+
         run: |
           export PEREGRINE_VERSION=$(git log -1 --format=%cd --date=format:v%Y-%m-%d)
-          gh repo clone https://github.com/Nexonous/Documentation
+
+          git config --local user.name github-actions
+          git config --local user.email github-actions@github.com
+          git clone https://$USERNAME:$REPO_KEY@github.com/Nexonous/Documentation
           cd Documentation
+
           git checkout -b update/$PEREGRINE_VERSION
           git submodule add https://github.com/Nexonous/Peregrine content/Peregrine/$PEREGRINE_VERSION
+          git add .
+          git commit -m "Updated Peregrine to new version: $PEREGRINE_VERSION"
           git push -u origin update/$PEREGRINE_VERSION
