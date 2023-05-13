@@ -18,7 +18,7 @@ jobs:
           export PEREGRINE_VERSION=$(git log -1 --format=%cd --date=format:v%Y-%m-%d)
 
           git config --global user.name ${{ github.actor }} 
-          git config --global user.email ${{ github.actor }}@users.noreply.github.com
+          git config --global user.email ${{ github.event.pusher.email }}
           git clone https://github.com/Nexonous/Documentation
           cd Documentation
 
