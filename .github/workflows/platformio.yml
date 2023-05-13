@@ -32,3 +32,21 @@ jobs:
 
       - name: Build Release
         run: pio run --environment esp32-release
+
+  update-documentation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Clone the documentation repository.
+        run: gh repo clone https://github.com/Nexonous/Documentation
+        
+      - name: Copy the documentation folder into the documentation content.
+        run: |
+          cd Documentation
+          export PEREGRINE_VERSION=$(git log -1 --format=%cd --date=format:v%Y.%m.%d)
+          gh issue create --title "Test issue for Peregrine" --body "A new version is up!" --assignee @me --label "enhancement"
+
+
+
