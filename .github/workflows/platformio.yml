@@ -45,7 +45,8 @@ jobs:
           OWNER: ${{ github.repository_owner }}
         run: |
           export PEREGRINE_VERSION=$(git log -1 --format=%cd --date=format:v%Y.%m.%d)
-          gh issue create --title "Test issue for Peregrine" --body "A new version is up!" --label "enhancement" --repo Nexonous/Documentation
-
-
-
+          gh repo clone https://github.com/Nexonous/Documentation
+          cd Documentation
+          git checkout -b update/$PEREGRINE_VERSION
+          git submodule add https://github.com/Nexonous/Peregrine content/Peregrine/$PEREGRINE_VERSION
+          git push -u origin update/$PEREGRINE_VERSION
