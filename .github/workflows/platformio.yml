@@ -43,10 +43,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OWNER: ${{ github.repository_owner }}
-          REPO: "Documentation"
         run: |
           export PEREGRINE_VERSION=$(git log -1 --format=%cd --date=format:v%Y.%m.%d)
-          gh issue create --title "Test issue for Peregrine" --body "A new version is up!" --label "enhancement"
+          gh issue create --title "Test issue for Peregrine" --body "A new version is up!" --label "enhancement" --repo Nexonous/Documentation
 
 
 
