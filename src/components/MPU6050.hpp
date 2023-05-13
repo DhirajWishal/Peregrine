@@ -95,4 +95,6 @@ private:
 
 	float m_ComplementaryAngleX = 0.0f;
 	float m_ComplementaryAngleY = 0.0f;
+
+	bool m_isConnected = true;
 };

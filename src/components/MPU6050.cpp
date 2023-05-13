@@ -19,19 +19,13 @@ void MPU6050::initialize()
 {
 	PEREGRINE_PRINTLN("Initializing the MPU6050 sensor.");
 
-#ifdef PEREGRINE_DEBUG
 	// Initialize the module.
 	if (!m_Module.begin())
 	{
 		PEREGRINE_PRINTLN("Failed to find MPU6050 chip!");
+		m_isConnected = false;
 		return;
 	}
-	
-#else
-	// Initialize the module.
-	m_Module.begin();
-
-#endif
 
 	// Setup the initial configuration.
 	m_Module.setAccelerometerRange(MPU6050_RANGE_8_G);
@@ -43,6 +37,10 @@ void MPU6050::initialize()
 
 void MPU6050::readData()
 {
+	// Return if the sensor is not connected.
+	if (!m_isConnected)
+		return;
+
 	// Get the data from the sensor.
 	sensors_event_t accelerometer;
 	sensors_event_t gyroscope;

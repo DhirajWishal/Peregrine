@@ -4,7 +4,9 @@
 #include "systems/OutputSystem.hpp"
 #include "systems/Stabilizer.hpp"
 #include "systems/InputSystem.hpp"
+
 #include "core/Configuration.hpp"
+#include "core/Logging.hpp"
 
 #if defined(PEREGRINE_DATA_LINK_FS_I6)
 #include "components/FSi6DataLink.hpp"
@@ -19,8 +21,6 @@ DefaultDataLink g_CurrentDataLink;
 DefaultDataLink g_CurrentDataLink;
 
 #endif
-
-#include "core/Logging.hpp"
 
 void setup()
 {

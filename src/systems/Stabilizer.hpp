@@ -7,6 +7,8 @@
 #include "components/MPU6050.hpp"
 #include "algorithms/PID.hpp"
 
+#include "core/NeuralNetwork.hpp"
+
 /**
  * @brief The PID algorithm uses some constants which can be tuned by the user to stabilize the incoming values.
  * Edit the following constants to tune the PID stabilization (for each control axis).
@@ -48,9 +50,20 @@ public:
 
 	float yawValue() { return m_Sensor.getAcceleration().m_Pitch; }
 
+	/**
+	 * @brief Compute the outputs using the input data.
+	 *
+	 * @param thrust The thrust value.
+	 * @param pitch The pitch value.
+	 * @param roll The roll value.
+	 * @param yaw The yaw value.
+	 * @return The final pitch, roll and yaw values.
+	 */
 	Vec3 computeOutputs(float thrust, float pitch, float roll, float yaw);
 
 private:
+	NeuralNetwork<10, 5, 6> m_NeuralNetwork;
+
 	MPU6050 m_Sensor;
 
 	PID m_PitchStabilizer;

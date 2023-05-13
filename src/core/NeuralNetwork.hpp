@@ -64,7 +64,7 @@ namespace Detail
 	/**
 	 * @brief Connection count structure specialization.
 	 *
-	 * @tparam Total THe number of connections till this point.
+	 * @tparam Total The number of connections till this point.
 	 * @tparam CurrentLayer The current layer's neuron count.
 	 * @tparam NextLayer The next layer's neuron count.
 	 */
@@ -73,6 +73,32 @@ namespace Detail
 	{
 		// The total connection count.
 		static constexpr uint32_t Count = Total + (CurrentLayer * NextLayer);
+	};
+
+	/**
+	 * @brief Output layer index structure.
+	 * This structure contains the output layer's index.
+	 *
+	 * @tparam Offset The offset till this point.
+	 * @tparam Layer The current layer's neuron count.
+	 * @tparam Rest The rest of the neuron counts.
+	 */
+	template <uint32_t Offset, uint8_t Layer, uint8_t... Rest>
+	struct OutputLayerIndex : public OutputLayerIndex<Offset + Layer, Rest...>
+	{
+	};
+
+	/**
+	 * @brief Output layer index structure specialization.
+	 *
+	 * @tparam Offset The offset till this point.
+	 * @tparam Layer The current layer's neuron count.
+	 */
+	template <uint32_t Offset, uint8_t Layer>
+	struct OutputLayerIndex<Offset, Layer>
+	{
+		static constexpr uint32_t Index = Offset;
+		static constexpr uint32_t Size = Layer;
 	};
 } // namespace Detail
 
@@ -93,21 +119,23 @@ struct Model final
 /**
  * @brief Neural network class.
  *
+ * @tparam InputLayer The input layer size.
  * @tparam Layers The input, hidden and output layers' neuron counts.
  */
-template <uint8_t... Layers>
+template <uint8_t InputLayer, uint8_t... Layers>
 class NeuralNetwork final
 {
 public:
-	static constexpr uint32_t g_LayerCount = sizeof...(Layers);
-	static constexpr uint8_t g_LayerSizes[] = {Layers...};
+	static constexpr uint32_t g_LayerCount = 1 + sizeof...(Layers);
 
-	static constexpr uint32_t g_NeuronCount = Detail::NeuronCount<0, Layers...>::Count;
-	static constexpr uint32_t g_ConnectionCount = Detail::ConnectionCount<0, Layers...>::Count;
-	static constexpr uint32_t g_BiasCount = Detail::BiasCount<0, Layers...>::Count;
+	static constexpr uint32_t g_NeuronCount = Detail::NeuronCount<0, InputLayer, Layers...>::Count;
+	static constexpr uint32_t g_ConnectionCount = Detail::ConnectionCount<0, InputLayer, Layers...>::Count;
+	static constexpr uint32_t g_BiasCount = Detail::BiasCount<0, InputLayer, Layers...>::Count;
 
-	static constexpr uint32_t g_OutputLayerIndex = g_LayerCount - 1;
-	static constexpr uint32_t g_OutputLayerSize = g_LayerSizes[g_OutputLayerIndex];
+	static constexpr uint32_t g_InputLayerSize = InputLayer;
+
+	static constexpr uint32_t g_OutputLayerIndex = Detail::OutputLayerIndex<0, InputLayer, Layers...>::Index;
+	static constexpr uint32_t g_OutputLayerSize = Detail::OutputLayerIndex<0, InputLayer, Layers...>::Size;
 
 	using ModelType = Model<g_ConnectionCount, g_BiasCount>;
 
@@ -156,16 +184,11 @@ public:
 	/**
 	 * @brief Run the neural network.
 	 *
-	 * @tparam Inputs The input types.
 	 * @param inputs The inputs to provide the neural network with. Make sure the input count matches the input layer's neuron count.
 	 */
-	template <class... Inputs>
-	void run(Inputs &&...inputs)
+	void run(const std::array<float, g_InputLayerSize> &inputs)
 	{
-		static_assert(sizeof...(inputs) == g_LayerSizes[0], "Invalid input argument count! Make sure it equals to "
-															"the input layer size.");
-
-		setInputs(0, std::forward<Inputs>(inputs)...);
+		std::copy_n(inputs.data(), g_InputLayerSize, m_Activations);
 		propagateForward();
 	}
 
@@ -183,52 +206,32 @@ public:
 	/**
 	 * @brief Train the neural network using the target values.
 	 *
-	 * @tparam Outputs The expected output value types.
 	 * @param expected The expected output values. Make sure the output count matches the output layer's neuron count.
 	 */
-	template <class... Outputs>
-	void train(Outputs &&...expected)
+	void train(const std::array<float, g_OutputLayerSize> &expected)
 	{
-		static_assert(sizeof...(expected) == g_LayerSizes[g_LayerCount - 1],
-					  "Invalid output argument count! Make sure it equals to "
-					  "the output layer size.");
+		for (uint32_t i = 0; i < g_OutputLayerSize; i++)
+			m_ErrorMatrix[i] = std::pow(expected[i] - getOutput(i + g_OutputLayerIndex), 2);
 
-		calculateCost(0, std::forward<Outputs>(expected)...);
 		propagateBackward();
 	}
 
 private:
 	/**
-	 * @brief Set the values to the input neurons.
-	 *
-	 * @tparam Input The input neuron type.
-	 * @tparam Inputs The input neuron types (the rest).
-	 * @param index The index of the neuron to set.
-	 * @param input The input value to set to the current neuron.
-	 * @param inputs The rest of the neurons.
-	 */
-	template <class Input, class... Inputs>
-	void setInputs(uint32_t index, Input &&input, Inputs &&...inputs)
-	{
-		m_Activations[index] = std::move(input);
-
-		if constexpr (sizeof...(inputs) > 0)
-			setInputs(index + 1, std::forward<Inputs>(inputs)...);
-	}
-
-	/**
 	 * @brief Perform forward propagation on the neural network.
 	 */
 	void propagateForward()
 	{
+		static constexpr uint8_t layerSizes[] = {Layers...};
+
 		uint32_t biasIndex = 0;
 		uint32_t activationIndex = 0;
-		uint32_t weightFactor = g_LayerSizes[0];
-		uint32_t previousLayerSize = g_LayerSizes[0];
+		uint32_t weightFactor = g_InputLayerSize;
+		uint32_t previousLayerSize = g_InputLayerSize;
 
-		for (uint8_t layer = 1; layer < g_LayerCount; layer++)
+		for (uint8_t layer = 0; layer < g_LayerCount - 1; layer++)
 		{
-			const auto currentLayerSize = g_LayerSizes[layer];
+			const auto currentLayerSize = layerSizes[layer];
 			const auto activationEnd = previousLayerSize + currentLayerSize;
 
 			for (uint32_t i = previousLayerSize; i < activationEnd; i++)
@@ -257,24 +260,6 @@ private:
 			m_MSE += error;
 
 		m_MSE /= g_NeuronCount;
-	}
-
-	/**
-	 * @brief Calculate the cost of the output using it's expected values.
-	 *
-	 * @tparam Output The output type.
-	 * @tparam Outputs The output types.
-	 * @param index The index of the current output neuron.
-	 * @param output The expected output of the current neuron.
-	 * @param outputs The rest of the expected values.
-	 */
-	template <class Output, class... Outputs>
-	void calculateCost(uint32_t index, Output &&output, Outputs &&...outputs)
-	{
-		m_ErrorMatrix[index] = std::pow(output - getOutput(index), 2);
-
-		if constexpr (sizeof...(outputs) > 0)
-			calculateCost(index + 1, std::forward<Outputs>(outputs)...);
 	}
 
 private:

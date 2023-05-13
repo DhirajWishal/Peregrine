@@ -15,10 +15,12 @@ inline void NoOp() {}
 #define PEREGRINE_SETUP_LOGGING(bound) Serial.begin(bound)
 #define PEREGRINE_PRINT(...) Serial.print(__VA_ARGS__)
 #define PEREGRINE_PRINTLN(...) Serial.println(__VA_ARGS__)
+#define PEREGRINE_PRINTF(...) Serial.printf(__VA_ARGS__)
 
 #else
 #define PEREGRINE_SETUP_LOGGING(bound) NoOp()
 #define PEREGRINE_PRINT(...) NoOp()
 #define PEREGRINE_PRINTLN(...) NoOp()
+#define PEREGRINE_PRINTF(...) NoOp()
 
 #endif
