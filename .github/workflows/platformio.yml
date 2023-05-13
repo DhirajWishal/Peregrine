@@ -44,7 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OWNER: ${{ github.repository_owner }}
         run: |
-          export PEREGRINE_VERSION=$(git log -1 --format=%cd --date=format:v%Y.%m.%d)
+          export PEREGRINE_VERSION=$(git log -1 --format=%cd --date=format:v%Y-%m-%d)
           gh repo clone https://github.com/Nexonous/Documentation
           cd Documentation
           git checkout -b update/$PEREGRINE_VERSION
