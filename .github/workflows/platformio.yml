@@ -46,7 +46,7 @@ jobs:
           REPO: "Documentation"
         run: |
           export PEREGRINE_VERSION=$(git log -1 --format=%cd --date=format:v%Y.%m.%d)
-          gh issue create --title "Test issue for Peregrine" --body "A new version is up!" --assignee @me --label "enhancement"
+          gh issue create --title "Test issue for Peregrine" --body "A new version is up!" --label "enhancement"
 
 
 
