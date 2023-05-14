@@ -21,29 +21,29 @@ Once you have everything ready, start connecting the components to the ESP32 dev
 |           Component          | Component's pin/ connection | ESP32 pin number |
 |:----------------------------:|:---------------------------:|:----------------:|
 |            MPU6050           |             VCC             |        VIN       |
-|                              |             GND             |        GND       |
-|                              |             SCL             |        22        |
-|                              |             SDA             |        21        |
+|            MPU6050           |             GND             |        GND       |
+|            MPU6050           |             SCL             |        22        |
+|            MPU6050           |             SDA             |        21        |
 |  Left wing BLDC motor driver |          VCC (Red)          |        VIN       |
-|                              |         GND (Brown)         |        GND       |
-|                              |       Signal (Yellow)       |        32        |
+|  Left wing BLDC motor driver |         GND (Brown)         |        GND       |
+|  Left wing BLDC motor driver |       Signal (Yellow)       |        32        |
 | Right wing BLDC motor driver |          VCC (Red)          |        VIN       |
-|                              |         GND (Brown)         |        GND       |
-|                              |       Signal (Yellow)       |        33        |
+| Right wing BLDC motor driver |         GND (Brown)         |        GND       |
+| Right wing BLDC motor driver |       Signal (Yellow)       |        33        |
 |        Left wing servo       |          VCC (Red)          |        VIN       |
-|                              |         GND (Brown)         |        GND       |
-|                              |       Signal (Yellow)       |        25        |
+|        Left wing servo       |         GND (Brown)         |        GND       |
+|        Left wing servo       |       Signal (Yellow)       |        25        |
 |       Right wing servo       |          VCC (Red)          |        VIN       |
-|                              |         GND (Brown)         |        GND       |
-|                              |       Signal (Yellow)       |        26        |
+|       Right wing servo       |         GND (Brown)         |        GND       |
+|       Right wing servo       |       Signal (Yellow)       |        26        |
 |        Elevator servo        |          VCC (Red)          |        VIN       |
-|                              |         GND (Brown)         |        GND       |
-|                              |       Signal (Yellow)       |        27        |
+|        Elevator servo        |         GND (Brown)         |        GND       |
+|        Elevator servo        |       Signal (Yellow)       |        27        |
 |         Rudder servo         |          VCC (Red)          |        VIN       |
-|                              |         GND (Brown)         |        GND       |
-|                              |       Signal (Yellow)       |        14        |
+|         Rudder servo         |         GND (Brown)         |        GND       |
+|         Rudder servo         |       Signal (Yellow)       |        14        |
 |        FS-i6 receiver        |              RX             |        RX2       |
-|                              |              TX             |        TX2       |
+|        FS-i6 receiver        |              TX             |        TX2       |
 
 Note that the drone motors do not directly connect to the ESP32 dev board. Its power lines (black and red wires) directly connect to the power lines of the distribution board and only the ESC's (Electronic Speed Controller/ motor driver) signal lines connect to the dev board.
 

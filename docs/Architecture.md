@@ -15,7 +15,7 @@ The controller source is made of up 4 main parts.
         - Input system.
         - Output system.
         - Stabilizing system.
-4. Components
+4. Components.
     - This is where all the components used by the systems are placed.
     - Location: `src/components/`.
 
