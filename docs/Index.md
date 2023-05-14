@@ -14,6 +14,8 @@ code .
 
 After opening the folder in VS Code, head to the PlatformIO extension and start by building the `esp32-debug` target. Once it gets built without an issue, you can connect the ESP32 board to the computer, setup the correct port and upload the code to the controller using the 'Upload and Monitor' task. We recommend running the debug target before uploading the release target to test if everything is working properly. Once everything is sorted out and if everything is working fine, you can upload the release build to the controller.
 
+***Please note that the controller is still in it's early stages and might not even work. So please don't use this as long as this notice is up!***
+
 ## License ⚖️
 
 This repository is licensed under [Apache-2.0](https://github.com/Nexonous/Peregrine/blob/release/LICENSE).

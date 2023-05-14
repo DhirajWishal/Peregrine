@@ -13,3 +13,5 @@ If you're new to the transmitter, use the following steps to do so.
 5. Using the "UP" button, cycle through the source list till it reaches the desired switch.
 6. Once selected, press down the "CANCEL" button till you get redirected back to the previous menu.
 7. When you're back at the menu, this means the settings has been updated. Now you can press "CANCEL" a couple more times to get back to the main menu.
+
+Setting the fly mode from Hover to Cruise and vice versa from a switch makes it better for the controller and the user since all the switches needs to be on the 'down' position when powering the transmitter. This will also make sure that the controller starts off in Hover mode and does not cause any problems for the operator and anyone or anything nearby.
