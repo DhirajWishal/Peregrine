@@ -1,4 +1,4 @@
-// Copyright 2023 Dhiraj Wishal
+// Copyright 2023 Nexonous
 // SPDX-License-Identifier: Apache-2.0
 
 #include "systems/OutputSystem.hpp"
@@ -11,8 +11,8 @@
 FSi6DataLink g_CurrentDataLink;
 
 #elif defined(PEREGRINE_DATA_LINK_NRF24L01)
-#include "components/DefaultDataLink.hpp"
-DefaultDataLink g_CurrentDataLink;
+#include "components/nRF24L01DataLink.hpp"
+nRF24L01DataLink g_CurrentDataLink;
 
 #else
 #include "components/DefaultDataLink.hpp"

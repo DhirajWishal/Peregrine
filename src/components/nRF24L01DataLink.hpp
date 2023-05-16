@@ -3,32 +3,39 @@
 
 #pragma once
 
-#include "GlobalState.hpp"
+#include "core/Types.hpp"
+#include "core/IDataLink.hpp"
+
+#include <nRF24L01.h>
+#include <RF24.h>
+
+constexpr auto g_ChipEnablePin = 2;
+constexpr auto g_ChipSelectNotPin = 15;
+constexpr byte g_DefaultAddress[6] = "00001";
 
 /**
- * @brief Data link interface class.
- * All data links are required to be derived from this class and attached to the input system when initialized.
+ * @brief nRF24L01 transceiver module class.
+ * This class can be used to transmit and/ or receive data from a nRF24L01 data link.
  */
-class IDataLink
+class nRF24L01DataLink final : public IDataLink
 {
 public:
 	/**
-	 * @brief Construct a new IInputController object.
+	 * @brief Construct a new n R F24 L01 object.
 	 */
-	IDataLink() = default;
+	nRF24L01DataLink();
 
 	/**
-	 * @brief On initialize pure virtual method.
+	 * @brief On initialize method.
 	 * This method is intended to be used to initialize the data link.
-	 * This method gets called once the data link is attached to the input system.
 	 */
-	virtual void onInitialize() = 0;
+	void onInitialize() override;
 
 	/**
-	 * @brief On update pure virtual method.
+	 * @brief On update method.
 	 * This method is intended to be used to update the data link and to poll the latest information.
 	 */
-	virtual void onUpdate() = 0;
+	void onUpdate() override;
 
 	/**
 	 * @brief On get thrust pure virtual method.
@@ -36,7 +43,7 @@ public:
 	 *
 	 * @return The thrust value.
 	 */
-	[[nodiscard]] virtual float onGetThrust() = 0;
+	[[nodiscard]] float onGetThrust() { return m_Payload.m_Throttle; }
 
 	/**
 	 * @brief On get pitch pure virtual method.
@@ -44,7 +51,7 @@ public:
 	 *
 	 * @return The pitch value.
 	 */
-	[[nodiscard]] virtual float onGetPitch() = 0;
+	[[nodiscard]] float onGetPitch() { return m_Payload.m_Pitch; }
 
 	/**
 	 * @brief On get roll pure virtual method.
@@ -52,7 +59,7 @@ public:
 	 *
 	 * @return The roll value.
 	 */
-	[[nodiscard]] virtual float onGetRoll() = 0;
+	[[nodiscard]] float onGetRoll() { return m_Payload.m_Roll; }
 
 	/**
 	 * @brief On get yaw pure virtual method.
@@ -60,5 +67,9 @@ public:
 	 *
 	 * @return The yaw value.
 	 */
-	[[nodiscard]] virtual float onGetYaw() = 0;
+	[[nodiscard]] float onGetYaw() { return m_Payload.m_Roll; }
+
+private:
+	RF24 m_Transceiver;
+	Vec4 m_Payload;
 };

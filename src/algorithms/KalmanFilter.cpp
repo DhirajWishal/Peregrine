@@ -1,4 +1,4 @@
-// Copyright 2023 Dhiraj Wishal
+// Copyright 2023 Nexonous
 // SPDX-License-Identifier: Apache-2.0
 
 // Ref: https://github.com/TKJElectronics/KalmanFilter/blob/master/Kalman.cpp
