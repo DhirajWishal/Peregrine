@@ -14,6 +14,10 @@ FSi6DataLink g_CurrentDataLink;
 #include "components/nRF24L01DataLink.hpp"
 nRF24L01DataLink g_CurrentDataLink;
 
+#elif defined(PEREGRINE_DATA_LINK_GYRO_CONTROLLER)
+#include "components/GyroControllerDataLink.hpp"
+GyroControllerDataLink g_CurrentDataLink;
+
 #else
 #include "components/DefaultDataLink.hpp"
 DefaultDataLink g_CurrentDataLink;

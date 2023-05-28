@@ -11,19 +11,19 @@
 
 constexpr auto g_ChipEnablePin = 2;
 constexpr auto g_ChipSelectNotPin = 15;
-constexpr byte g_DefaultAddress[6] = "nRF24";
+constexpr byte g_DefaultAddress[6] = "GyroC";
 
 /**
- * @brief nRF24L01 transceiver module class.
- * This class can be used to transmit and/ or receive data from a nRF24L01 data link.
+ * @brief GyroController module class.
+ * This class can be used to communicate with the GyroController.
  */
-class nRF24L01DataLink final : public IDataLink
+class GyroControllerDataLink final : public IDataLink
 {
 public:
 	/**
-	 * @brief Construct a new n R F24 L01 object.
+	 * @brief Construct a new GyroController data link object.
 	 */
-	nRF24L01DataLink();
+	GyroControllerDataLink();
 
 	/**
 	 * @brief On initialize method.
@@ -43,7 +43,7 @@ public:
 	 *
 	 * @return The thrust value.
 	 */
-	[[nodiscard]] float onGetThrust() { return m_Payload.m_Throttle; }
+	[[nodiscard]] float onGetThrust() { return m_ThrottleValue; }
 
 	/**
 	 * @brief On get pitch pure virtual method.
@@ -72,4 +72,6 @@ public:
 private:
 	RF24 m_Transceiver;
 	Vec4 m_Payload;
+
+	float m_ThrottleValue = 0.0f;
 };
