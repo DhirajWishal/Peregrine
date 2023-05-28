@@ -4,11 +4,6 @@
 #include <SPI.h>
 #include "GyroControllerDataLink.hpp"
 
-#ifdef PEREGRINE_DEBUG
-#include "printf.h"
-
-#endif
-
 #include "core/Logging.hpp"
 #include "core/Constants.hpp"
 
@@ -34,12 +29,6 @@ void GyroControllerDataLink::onInitialize()
 
 	m_Transceiver.openReadingPipe(1, g_DefaultAddress);
 	m_Transceiver.startListening();
-
-#ifdef PEREGRINE_DEBUG
-	printf_begin();
-	m_Transceiver.printPrettyDetails();
-
-#endif
 
 	PEREGRINE_PRINTLN("The nRF24L01 transceiver is initialized.");
 }

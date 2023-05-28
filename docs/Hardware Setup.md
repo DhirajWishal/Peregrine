@@ -47,6 +47,20 @@ Once you have everything ready, start connecting the components to the ESP32 dev
 
 Note that the drone motors do not directly connect to the ESP32 dev board. Its power lines (black and red wires) directly connect to the power lines of the distribution board and only the ESC's (Electronic Speed Controller/ motor driver) signal lines connect to the dev board.
 
+If you are using the GyroController, or the nRF24L01 transceiver for communication, use the following table to connect everything together.
+
+| Component's pin/ connection | ESP32 pin number |
+|:---------------------------:|:----------------:|
+|             VCC             |       3.3v       |
+|             GND             |        GND       |
+|              CE             |         2        |
+|             CSN             |        15        |
+|             SCK             |        18        |
+|             MOSI            |        23        |
+|             MISO            |        19        |
+
+Make sure that you select the proper data link in the configuration file in order to use the proper data link!
+
 ## Connecting everything together 🪛
 
 When connecting the MPU6050 sensor, make sure that the sensor's X-axis is parallel to the wing and goes from left to right. This will result in the Y axis pointing directly forward. The sensor should be set upright.

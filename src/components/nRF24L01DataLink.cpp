@@ -4,11 +4,6 @@
 #include <SPI.h>
 #include "nRF24L01DataLink.hpp"
 
-#ifdef PEREGRINE_DEBUG
-#include "printf.h"
-
-#endif
-
 #include "core/Logging.hpp"
 
 nRF24L01DataLink::nRF24L01DataLink()
@@ -33,12 +28,6 @@ void nRF24L01DataLink::onInitialize()
 
 	m_Transceiver.openReadingPipe(1, g_DefaultAddress);
 	m_Transceiver.startListening();
-
-#ifdef PEREGRINE_DEBUG
-	printf_begin();
-	m_Transceiver.printPrettyDetails();
-
-#endif
 
 	PEREGRINE_PRINTLN("The nRF24L01 transceiver is initialized.");
 }
