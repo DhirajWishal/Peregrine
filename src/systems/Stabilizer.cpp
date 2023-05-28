@@ -36,5 +36,6 @@ Vec3 Stabilizer::computeOutputs(float thrust, float pitch, float roll, float yaw
 	const auto rotationRate = m_Sensor.getGyration();
 	const auto outputYaw = m_YawStabilizer.calculate(rotationRate.m_Yaw, yaw);
 
-	return Vec3(outputPitch, outputYaw, outputRoll);
+	// return Vec3(outputPitch, outputYaw, outputRoll);
+	return Vec3(pitch, roll, yaw);
 }

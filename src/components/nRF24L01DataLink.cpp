@@ -27,16 +27,14 @@ void nRF24L01DataLink::onInitialize()
 	}
 
 	m_Transceiver.setDataRate(RF24_250KBPS);
+	m_Transceiver.setPALevel(RF24_PA_MAX);
+	m_Transceiver.setAutoAck(false);
+	m_Transceiver.setRetries(5, 15);
 
-	m_Transceiver.openReadingPipe(0, g_DefaultAddress);
+	m_Transceiver.openReadingPipe(1, g_DefaultAddress);
 	m_Transceiver.startListening();
 
 #ifdef PEREGRINE_DEBUG
-	m_Transceiver.setAutoAck(1);
-	m_Transceiver.enableAckPayload();
-	m_Transceiver.setRetries(5, 15);
-	m_Transceiver.setPALevel(RF24_PA_MIN);
-
 	printf_begin();
 	m_Transceiver.printPrettyDetails();
 
